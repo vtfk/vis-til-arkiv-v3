@@ -1,0 +1,38 @@
+{
+  "name": "vis-til-arkiv-v2",
+  "version": "1.0.0",
+  "description": "Archive documents from Visma InSchool to Public 360",
+  "main": "index.js",
+  "scripts": {
+    "test": "standard && jest"
+  },
+  "keywords": [
+    "archive",
+    "vis"
+  ],
+  "author": "jorgen.thorsnes@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+    "@vtfk/logger": "^3.0.1",
+    "@vtfk/pdf-text-reader": "^1.0.3",
+    "axios": "^0.24.0",
+    "dotenv": "^10.0.0",
+    "nodemailer": "^6.7.0",
+    "vtfk-schools-info": "^3.1.1"
+  },
+  "devDependencies": {
+    "jest": "^27.3.1",
+    "standard": "^16.0.4"
+  },
+  "standard": {
+    "env": [
+      "jest"
+    ]
+  },
+  "jest": {
+    "testMatch": [
+      "**/test/**/*test.[jt]s?(x)",
+      "**/?(*.)+.(spec|test).[jt]s?(x)"
+    ]
+  }
+}
