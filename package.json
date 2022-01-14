@@ -1,5 +1,5 @@
 {
-  "name": "vis-til-arkiv-v2",
+  "name": "vis-til-arkiv-v3",
   "version": "1.0.0",
   "description": "Archive documents from Visma InSchool to Public 360",
   "main": "index.js",
@@ -14,6 +14,7 @@
   "license": "MIT",
   "dependencies": {
     "@vtfk/logger": "^3.0.1",
+    "@vtfk/pdf-splitter": "^1.0.3",
     "@vtfk/pdf-text-reader": "^1.0.3",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
