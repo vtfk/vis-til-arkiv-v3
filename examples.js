@@ -1,6 +1,7 @@
 (async () => {
   const axios = require('axios')
   const dispatchDocuments = require('./jobs/dispatchDocuments')
+  const getData = require('./jobs/getData')
   const findDocumentData = require('./lib/findDocumentData')
   const { archiveMethods } = require('./archiveMethods')
   const { rootDirectory, documentDirectoryName, p360 } = require('./config')
@@ -13,11 +14,16 @@
     await dispatchDocuments()
   } catch (error) {
     console.log(error)
-    await teamsError('Error when dispatching documents', rootDirectory, error)
+    // await teamsError('Error when dispatching documents', rootDirectory, error)
+  }
+  try {
+    await getData()
+  } catch (error) {
+    console.log(error)
+    // await teamsError('Error when dispatching documents', rootDirectory, error)
   }
 
   // get document data, create json, move to next job folder
-
 
   // sync contact, write json, move to next job folder
 
@@ -26,7 +32,7 @@
   // send to archive, if dispatch, write json, move to svarut folder, else move to imported
 
   // dispatch documents, move to imported
-
+  /*
   for (const [method, options] of Object.entries(archiveMethods)) { // For each document type
     const pdfs = getPdfsInFolder(`${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}`)
     for (const pdf of pdfs) { // For each pdf of the document type
@@ -44,7 +50,8 @@
         pdfData.data = findDocumentData[options.findDataMethod](method, pdfData.pdfText)
       } catch (error) {
         console.log('Error finding documentData', error)
-      } // Get person info from DSF and P360
+      }
+      // Get person info from DSF and P360
       try {
         const syncElevmappe = await axios.post(p360.syncElevmappeUrl, { ssn: '29019342709' }, { headers: { [p360.syncElevmappeHeaderName]: p360.syncElevmappeKey } })
         pdfData.studentData = syncElevmappe.data
@@ -61,14 +68,14 @@
         }
         pdfData.p360metadata = createMetadata({ template: require(`../templates/${options.archiveTemplate}.json`), documentData: pdf.documentData })
       } catch (error) {
-        
+
       }
       try {
         console.log(pdfData.pdfName)
-        jsonFile.name = saveJsonDocument(pdfData.pdfName.substr(0, pdfData.pdfName.lastIndexOf(".")) + ".json", pdfData)
+        jsonFile.name = saveJsonDocument(pdfData.pdfName.substr(0, pdfData.pdfName.lastIndexOf('.')) + '.json', pdfData)
       } catch (error) {
         console.log(error)
       }
     }
-  }
+  } */
 })()
