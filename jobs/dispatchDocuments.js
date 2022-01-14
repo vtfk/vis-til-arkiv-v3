@@ -29,9 +29,6 @@ const checkIdentifierStrings = (pdfStrings) => {
   }
   pdfText.sentence = pdfText.words.join(' ') // Creates a string from all the words put together
 
-  //console.log(pdfText.sentence)
-  console.log(pdfText.words)
-
   const foundTypes = []
   for (const docType of visStandardDocs) {
     let idW = docType.identifierStrings.filter(w => w.trim().split(' ').length === 1)
@@ -39,9 +36,6 @@ const checkIdentifierStrings = (pdfStrings) => {
     idW = idW.map(w => w.trim())
     idS = idS.map(s => s.trim())
 
-    console.log(idS)
-    console.log(idW)
-    
     const hasIdentifierWords = idW.every((word) => pdfText.words.includes(word))
     const hasIdentifierSentences = idS.every((sentence) => pdfText.sentence.includes(sentence))
 
@@ -77,13 +71,14 @@ module.exports = async () => {
       const userEmailAddress = getEmailFromFileName(pdf)
       const filename = getFileName(pdf)
 
-      //emailUnrecognizedDocument(userEmailAddress, filename)
+      // emailUnrecognizedDocument(userEmailAddress, filename)
+
       if (foundTypes.length === 0) {
         logger('info', [`Could not find any documenttype for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
-        //await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
+        // await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
       } else {
         logger('warn', [`Found several documenttypes for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
-        //await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
+        // await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
       }
     }
   }
