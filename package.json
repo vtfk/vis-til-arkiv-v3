@@ -18,7 +18,7 @@
     "@vtfk/pdf-text-reader": "^1.0.3",
     "axios": "^0.24.0",
     "dotenv": "^10.0.0",
-    "nodemailer": "^6.7.0",
+    "nodemailer": "^6.7.2",
     "vtfk-schools-info": "^3.1.1"
   },
   "devDependencies": {
