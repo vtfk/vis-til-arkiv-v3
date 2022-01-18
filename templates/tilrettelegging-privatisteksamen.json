@@ -1,0 +1,36 @@
+{
+    "Title": "Svar på søknad om tilrettelegging ved privatisteksamen",
+    "UnofficialTitle": "Svar på søknad om tilrettelegging ved privatisteksamen - <<<studentName>>>",
+    "DocumentDate": "<<<documentDate>>>",
+    "Archive": "Saksdokument",
+    "Category": "Dokument ut",
+    "Paragraph": "Offl. § 13 jf. fvl. § 13 (1) nr.1",
+    "AccessCodeDescription": "Offl §13 jf. fvl §13 første ledd pkt. 1 - taushetsplikt om personlige forhold",
+    "Status": "J",
+    "CaseNumber": "<<<elevmappeCaseNumber>>>",
+    "AccessGroup": "<<<schoolAccessGroup>>>",
+    "AccessCode": "13",
+    "ResponsibleEnterpriseNumber": "<<<schoolOrgNr>>>",
+    "Contacts": [
+        {
+            "ReferenceNumber": "<<<schoolOrgNr>>>",
+            "Role": "Avsender",
+            "IsUnofficial": false
+        },
+        {
+            "ReferenceNumber": "<<<studentBirthnr>>>",
+            "Role": "Mottaker",
+            "IsUnofficial": true
+        }
+    ],
+    "Files": [
+        {
+            "Base64Data": "<<<pdfFileBase64>>>",
+            "Category": "1",
+            "Format": "pdf",
+            "Status": "F",
+            "Title": "Svar på søknad om tilrettelegging ved eksamen og prøver",
+            "VersionFormat": "A"
+        }
+    ]
+}
