@@ -1,5 +1,5 @@
 const pdfReader = require('@vtfk/pdf-text-reader')
-const { getPdfsInFolder, moveToFolder, getEmailFromFileName, getFileName, getDocumentTypeDir, createSubFolder } = require('../lib/fileAndfolderActions')
+const { getFilesInFolder, moveToFolder, getEmailFromFileName, getFileName, getDocumentTypeDir, createSubFolder } = require('../lib/fileAndfolderActions')
 const { teamsInfo } = require('../lib/teamsActions')
 const { emailUnrecognizedDocument } = require('../lib/sendEmail')
 const { dispatchDirectoryName, typeSearchWord, documentDirectoryName, deleteDirectoryName, rootDirectory } = require('../config')
@@ -13,7 +13,7 @@ const checkSoknad = (pdfStrings) => {
       const desc = pdfStrings[i].split(':')[0].trim()
       const value = pdfStrings[i].split(':')[1].trim()
       if (desc === typeSearchWord) {
-        if (archiveMethods[value] && !foundTypes.includes(value) && archiveMethods[value].findDataMethod && archiveMethods[value].findDataMethod === 'soknad') foundTypes.push(value)
+        if (archiveMethods[value] && !foundTypes.includes(value) && archiveMethods[value].findDataMethod && archiveMethods[value].findDataMethod === 'soknad' && archiveMethods[value].active) foundTypes.push(value)
       }
     }
   }
@@ -30,7 +30,7 @@ const checkIdentifierStrings = (pdfStrings) => {
   pdfText.sentence = pdfText.words.join(' ') // Creates a string from all the words put together
 
   const foundTypes = []
-  for (const docType of visStandardDocs) {
+  for (const docType of (visStandardDocs.filter(m => m.active))) {
     let idW = docType.identifierStrings.filter(w => w.trim().split(' ').length === 1)
     let idS = docType.identifierStrings.filter(w => !idW.includes(w))
     idW = idW.map(w => w.trim())
@@ -49,7 +49,7 @@ module.exports = async () => {
   createSubFolder(documentDirectoryName)
   createSubFolder(deleteDirectoryName)
 
-  const listOfPdfs = getPdfsInFolder(`${rootDirectory}/${dispatchDirectoryName}`)
+  const listOfPdfs = getFilesInFolder(`${rootDirectory}/${dispatchDirectoryName}`, 'pdf')
   logger('info', [`Found ${listOfPdfs.length} pdfs in VIStilArkiv dispatch folder`])
   for (const pdf of listOfPdfs) {
     logger('info', [`Reading file ${pdf}`])
@@ -71,14 +71,14 @@ module.exports = async () => {
       const userEmailAddress = getEmailFromFileName(pdf)
       const filename = getFileName(pdf)
 
-      // emailUnrecognizedDocument(userEmailAddress, filename)
+      emailUnrecognizedDocument(userEmailAddress, filename)
 
       if (foundTypes.length === 0) {
         logger('info', [`Could not find any documenttype for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
-        // await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
+        await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
       } else {
         logger('warn', [`Found several documenttypes for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
-        // await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
+        await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
       }
     }
   }

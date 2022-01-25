@@ -2,14 +2,15 @@
 const { archiveMethods } = require('../archiveMethods')
 const pdfReader = require('@vtfk/pdf-text-reader')
 const findDocumentData = require('../lib/findDocumentData')
-const { getPdfsInFolder, saveJsonDocument, moveToFolder } = require('../lib/fileAndfolderActions')
+const { getFilesInFolder, saveJsonDocument, moveToFolder } = require('../lib/fileAndfolderActions')
 const splitPdf = require('@vtfk/pdf-splitter')
 const path = require('path')
-const { rootDirectory, documentDirectoryName, p360 } = require('../config')
+const { rootDirectory, documentDirectoryName } = require('../config')
 
 module.exports = async () => {
-  for (const [method, options] of Object.entries(archiveMethods)) { // For each document type
-    const pdfs = getPdfsInFolder(`${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}`)
+  for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
+    const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}`
+    const pdfs = getFilesInFolder(`${jobDir}`, 'pdf')
     for (const pdf of pdfs) { // For each pdf of the document type
       const pdfData = {
         pdfName: pdf
@@ -30,7 +31,7 @@ module.exports = async () => {
           const pdfToSplit = {
             pdf,
             keywords: options.splitStrings
-            // outputDir: `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}` // Optional, defaults to directory of the input pdf
+            // outputDir: `${jobDir}` // Optional, defaults to directory of the input pdf
           }
           let result
 
@@ -41,11 +42,11 @@ module.exports = async () => {
           }
           if (result.failed.length > 0) {
             // Move splitted pdf to failed folder
-            moveToFolder(pdf, `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/failedSplitted`) // Lagre json med info om hva som feila i splittinga
+            moveToFolder(pdf, `${jobDir}/failedSplitted`) // Lagre json med info om hva som feila i splittinga
             console.log('AIAIAIAIAIA splitting faila', result.failed)
           } else {
             // Move splitted pdf to finished folder
-            moveToFolder(pdf, `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/splitted`)
+            moveToFolder(pdf, `${jobDir}/splitted`)
           }
           for (const splitPdf of result.success) {
             const splitPdfData = {
@@ -61,13 +62,13 @@ module.exports = async () => {
             // Get data
             try {
               splitPdfData.documentData = await findDocumentData[options.findDataMethod](method, splitPdfData.pdfText)
-              moveToFolder(splitPdf.pdf, `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/syncStudentData`)
+              moveToFolder(splitPdf.pdf, `${jobDir}/syncStudentData`)
               const jsonFile = {
                 pdf: path.basename(splitPdf.pdf),
                 documentData: { ...splitPdfData.documentData, split: true },
                 retries: 0
               }
-              saveJsonDocument(`${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/syncStudentData/${path.basename(splitPdf.pdf).substring(0, path.basename(splitPdf.pdf).lastIndexOf('.'))}.json`, jsonFile)
+              saveJsonDocument(`${jobDir}/syncStudentData/${path.basename(splitPdf.pdf).substring(0, path.basename(splitPdf.pdf).lastIndexOf('.'))}.json`, jsonFile)
             } catch (error) {
               console.log(error)
             }
@@ -76,13 +77,13 @@ module.exports = async () => {
           // Get data
           try {
             pdfData.documentData = await findDocumentData[options.findDataMethod](method, pdfData.pdfText)
-            moveToFolder(pdf, `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/syncStudentData`)
+            moveToFolder(pdf, `${jobDir}/syncStudentData`)
             const jsonFile = {
               pdf: path.basename(pdfData.pdfName),
               documentData: pdfData.documentData,
               retries: 0
             }
-            saveJsonDocument(`${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/syncStudentData/${path.basename(pdfData.pdfName).substring(0, path.basename(pdfData.pdfName).lastIndexOf('.'))}.json`, jsonFile)
+            saveJsonDocument(`${jobDir}/syncStudentData/${path.basename(pdfData.pdfName).substring(0, path.basename(pdfData.pdfName).lastIndexOf('.'))}.json`, jsonFile)
           } catch (error) {
             console.log(error)
           }
