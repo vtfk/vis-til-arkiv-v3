@@ -2,6 +2,10 @@
   const axios = require('axios')
   const dispatchDocuments = require('./jobs/dispatchDocuments')
   const getData = require('./jobs/getData')
+  const syncStudentData = require('./jobs/syncStudentData')
+  const getArchiveMetadata = require('./jobs/getArchiveMetadata')
+  const archiveDocument = require('./jobs/archiveDocument')
+  const svarut = require('./jobs/svarut')
   const findDocumentData = require('./lib/findDocumentData')
   const { archiveMethods } = require('./archiveMethods')
   const { rootDirectory, documentDirectoryName, p360 } = require('./config')
@@ -22,6 +26,29 @@
     console.log(error)
     // await teamsError('Error when dispatching documents', rootDirectory, error)
   }
+  try {
+    await syncStudentData()
+  } catch (error) {
+    console.log(error)
+    // await teamsError('Error when dispatching documents', rootDirectory, error)
+  }
+  try {
+    getArchiveMetadata()
+  } catch (error) {
+    console.log(error)
+    // await teamsError('Error when dispatching documents', rootDirectory, error)
+  }
+  try {
+    await archiveDocument()
+  } catch (error) {
+    console.log(error)
+    // await teamsError('Error when dispatching documents', rootDirectory, error)
+  }
+  try {
+    await svarut()
+  } catch (error) {
+    console.log(error)
+  }
 
   // get document data, create json, move to next job folder
 
@@ -31,7 +58,7 @@
 
   // send to archive, if dispatch, write json, move to svarut folder, else move to imported
 
-  // dispatch documents, move to imported
+  // if blocked address, create internal note, else - dispatch documents, move to imported
   /*
   for (const [method, options] of Object.entries(archiveMethods)) { // For each document type
     const pdfs = getPdfsInFolder(`${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}`)

@@ -18,7 +18,9 @@ module.exports = {
     syncElevmappeUrl: process.env.P360_SYNCELEVMAPPE_URL || 'syncelevmappe.<domain>.no/api/v1/SyncElevmappe',
     syncElevmappeKey: process.env.P360_SYNCELEVMAPPE_KEY || 'asfdfhdskjgfkjdfgjkfglkjhdflkgdf23',
     syncElevmappeHeaderName: process.env.P360_SYNCELEVMAPPE_HEADER_NAME || 'some-header-name',
-    archiveDocUrl: process.env.P360_ARCHIVE_DOC_URL || 'https://360.<domain>.no/api',
-    archiveKey: process.env.P360_ARCHIVE_KEY || 'asfdfhdskjgfkjdfgjkfglkjhdflkgdf23'
+    archiveDocUrl: process.env.P360_ARCHIVE_DOC_URL || 'https://360.<domain>.no/SIFapi',
+    dispatchDocUrl: process.env.P360_DISPATCH_DOC_URL || 'https://360.<domain>.no/SIFapi',
+    archiveKey: process.env.P360_ARCHIVE_KEY || 'asfdfhdskjgfkjdfgjkfglkjhdflkgdf23',
+    archiveQueryString: process.env.P360_ARCHIVE_QUERY_STRING || '?mrQueryString='
   }
 }

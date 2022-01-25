@@ -105,3 +105,6 @@ dist
 
 # Production archiveMethods
 archiveMethods.js
+
+# Pdfs
+*.pdf
