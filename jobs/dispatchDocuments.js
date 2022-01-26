@@ -50,9 +50,9 @@ module.exports = async () => {
   createSubFolder(deleteDirectoryName)
 
   const listOfPdfs = getFilesInFolder(`${rootDirectory}/${dispatchDirectoryName}`, 'pdf')
-  logger('info', [`Found ${listOfPdfs.length} pdfs in VIStilArkiv dispatch folder`])
+  logger('info', ["Vis-til-Arkiv", `Found ${listOfPdfs.length} pdfs in VIStilArkiv dispatch folder`])
   for (const pdf of listOfPdfs) {
-    logger('info', [`Reading file ${pdf}`])
+    logger('info', ["Vis-til-Arkiv", `Reading file ${pdf}`])
     const pdfContent = await pdfReader(pdf) // read pdf
     const pdfStrings = pdfContent.textContent.map(ele => ele.str)
     let foundTypes = []
@@ -61,8 +61,8 @@ module.exports = async () => {
     foundTypes = foundTypes.concat(checkIdentifierStrings(pdfStrings))
 
     if (foundTypes.length === 1) {
-      moveToFolder(pdf, getDocumentTypeDir(foundTypes[0]))
-      logger('info', [`Found documenttype ${foundTypes[0]} and moved pdf ${pdf} to folder ${getDocumentTypeDir(foundTypes[0])}`])
+      moveToFolder(pdf, `${getDocumentTypeDir(foundTypes[0])}/getData`)
+      logger('info', ["Vis-til-Arkiv", `Found documenttype ${foundTypes[0]} and moved pdf ${pdf} to folder ${getDocumentTypeDir(foundTypes[0])}/getData`])
     } else {
       moveToFolder(pdf, `${rootDirectory}/${deleteDirectoryName}`)
 
@@ -74,10 +74,10 @@ module.exports = async () => {
       emailUnrecognizedDocument(userEmailAddress, filename)
 
       if (foundTypes.length === 0) {
-        logger('info', [`Could not find any documenttype for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
+        logger('info', ["Vis-til-Arkiv", `Could not find any documenttype for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
         await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
       } else {
-        logger('warn', [`Found several documenttypes for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
+        logger('warn', ["Vis-til-Arkiv", `Found several documenttypes for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
         await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
       }
     }
