@@ -37,7 +37,7 @@ module.exports = () => {
         }
 
         // Check if pdf was split, and we need to convert to pdf/a
-        // set to production versionFormat
+        if (json.documentData.split) metadata.Files[0].VersionFormat = 'P'
 
         moveToNextJob({ ...json, metadata }, jsonFile, jobDir, 'archive')
 
