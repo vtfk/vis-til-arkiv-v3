@@ -2,7 +2,7 @@
 const { archiveMethods } = require('../archiveMethods')
 const pdfReader = require('@vtfk/pdf-text-reader')
 const findDocumentData = require('../lib/findDocumentData')
-const { getFilesInFolder, saveJsonDocument, moveToFolder } = require('../lib/fileAndfolderActions')
+const { getFilesInFolder, moveToFolder, saveJsonDocument } = require('../lib/fileAndfolderActions')
 const splitPdf = require('@vtfk/pdf-splitter')
 const path = require('path')
 const { rootDirectory, documentDirectoryName } = require('../config')
@@ -10,7 +10,7 @@ const { rootDirectory, documentDirectoryName } = require('../config')
 module.exports = async () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
     const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}`
-    const pdfs = getFilesInFolder(`${jobDir}`, 'pdf')
+    const pdfs = getFilesInFolder(jobDir, 'pdf')
     for (const pdf of pdfs) { // For each pdf of the document type
       const pdfData = {
         pdfName: pdf

@@ -1,16 +1,16 @@
 // arkiver, lagre json, send til neste jobb, eller ferdig
 const { archiveMethods } = require('../archiveMethods')
-const { getFilesInFolder, saveJsonDocument, moveToFolder, convertToBase64, getEmailFromFileName } = require('../lib/fileAndfolderActions')
-const path = require('path')
+const { getFilesInFolder, convertToBase64, getEmailFromFileName } = require('../lib/fileAndfolderActions')
+const { moveToNextJob } = require('../lib/jobTools')
 const { rootDirectory, documentDirectoryName, p360 } = require('../config')
 const createMetadata = require('../lib/createMetadata')
 const axios = require('axios')
 
 module.exports = async () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
-    const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}`
+    const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/svarut`
 
-    const jsons = getFilesInFolder(`${jobDir}/svarut`, 'json')
+    const jsons = getFilesInFolder(jobDir, 'json')
     for (const jsonFile of jsons) { // For each json of the document type
       const json = require(jsonFile) // Get json as object
 
@@ -38,33 +38,24 @@ module.exports = async () => {
           if (!internalNoteRes.data.Successful) {
             throw new Error(internalNoteRes.data.ErrorMessage)
           }
+          moveToNextJob({ ...json, svarut: false, internalNote: internalNoteRes.data }, jsonFile, jobDir, 'imported')
 
-          moveToFolder(`${jobDir}/svarut/${json.pdf}`, `${jobDir}/imported`)
-          moveToFolder(jsonFile, `${jobDir}/imported`)
-          const jsonWrite = {
-            ...json,
-            svarut: false,
-            internalNote: internalNoteRes.data
-          }
-          saveJsonDocument(`${jobDir}/imported/${path.basename(jsonFile).substring(0, path.basename(jsonFile).lastIndexOf('.'))}.json`, jsonWrite)
         } catch (error) {
           console.log(error)
         }
       } else {
         try {
-          const svarutRes = await axios.post(`${p360.dispatchDocUrl}${p360.archiveQueryString}${p360.archiveKey}`, { parameter: { Documents: [{ DocumentNumber: json.archive.DocumentNumber }] } })
+          if (options.manualSvarUt) {
+            // post a teams message, that it needs to be manually dispatched
+          } else {
+            const svarutRes = await axios.post(`${p360.dispatchDocUrl}${p360.archiveQueryString}${p360.archiveKey}`, { parameter: { Documents: [{ DocumentNumber: json.archive.DocumentNumber }] } })
 
-          if (!svarutRes.data.Successful) {
-            throw new Error(svarutRes.data.ErrorMessage)
+            if (!svarutRes.data.Successful) {
+              throw new Error(svarutRes.data.ErrorMessage)
+            }
+            moveToNextJob({ ...json, svarut: svarutRes.data }, jsonFile, jobDir, 'imported')
           }
 
-          moveToFolder(`${jobDir}/svarut/${json.pdf}`, `${jobDir}/imported`)
-          moveToFolder(jsonFile, `${jobDir}/imported`)
-          const jsonWrite = {
-            ...json,
-            svarut: svarutRes.data
-          }
-          saveJsonDocument(`${jobDir}/imported/${path.basename(jsonFile).substring(0, path.basename(jsonFile).lastIndexOf('.'))}.json`, jsonWrite)
         } catch (error) {
           console.log(error)
           // Continue and set retry count

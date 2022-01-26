@@ -1,13 +1,13 @@
 const { archiveMethods } = require('../archiveMethods')
-const { getFilesInFolder, saveJsonDocument, moveToFolder, convertToBase64 } = require('../lib/fileAndfolderActions')
-const path = require('path')
+const { getFilesInFolder, convertToBase64 } = require('../lib/fileAndfolderActions')
+const { moveToNextJob } = require('../lib/jobTools')
 const { rootDirectory, documentDirectoryName } = require('../config')
 const createMetadata = require('../lib/createMetadata')
 
 module.exports = () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
-    const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}`
-    const jsons = getFilesInFolder(`${jobDir}/getArchiveMetadata`, 'json')
+    const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/getArchiveMetadata`
+    const jsons = getFilesInFolder(jobDir, 'json')
     for (const jsonFile of jsons) { // For each json of the document type
       const json = require(jsonFile) // Get json as object
 
@@ -24,7 +24,7 @@ module.exports = () => {
             schoolAccessGroup: json.documentData.schoolAccessGroup,
             schoolOrgNr: json.documentData.schoolOrgnr,
             ssn: json.privatePerson.ssn,
-            pdfFileBase64: convertToBase64(`${jobDir}/getArchiveMetadata/${json.pdf}`)
+            pdfFileBase64: convertToBase64(`${jobDir}/${json.pdf}`)
           }
         }
 
@@ -36,13 +36,11 @@ module.exports = () => {
           metadata.Status = 'R'
         }
 
-        moveToFolder(`${jobDir}/getArchiveMetadata/${json.pdf}`, `${jobDir}/archive`)
-        moveToFolder(jsonFile, `${jobDir}/archive`)
-        const jsonWrite = {
-          ...json,
-          metadata
-        }
-        saveJsonDocument(`${jobDir}/archive/${path.basename(jsonFile).substring(0, path.basename(jsonFile).lastIndexOf('.'))}.json`, jsonWrite)
+        // Check if pdf was split, and we need to convert to pdf/a
+        // set to production versionFormat
+
+        moveToNextJob({ ...json, metadata }, jsonFile, jobDir, 'archive')
+
       } catch (error) {
         console.log(error)
         // Continue and set retry count
