@@ -3,13 +3,14 @@ const { archiveMethods } = require('../archiveMethods')
 const pdfReader = require('@vtfk/pdf-text-reader')
 const findDocumentData = require('../lib/findDocumentData')
 const { getFilesInFolder, moveToFolder, saveJsonDocument } = require('../lib/fileAndfolderActions')
+const { moveToNextJob } = require('../lib/jobTools')
 const splitPdf = require('@vtfk/pdf-splitter')
 const path = require('path')
 const { rootDirectory, documentDirectoryName } = require('../config')
 
 module.exports = async () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
-    const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}`
+    const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/getData`
     const pdfs = getFilesInFolder(jobDir, 'pdf')
     for (const pdf of pdfs) { // For each pdf of the document type
       const pdfData = {
@@ -62,13 +63,14 @@ module.exports = async () => {
             // Get data
             try {
               splitPdfData.documentData = await findDocumentData[options.findDataMethod](method, splitPdfData.pdfText)
-              moveToFolder(splitPdf.pdf, `${jobDir}/syncStudentData`)
-              const jsonFile = {
+
+              const jsonData = {
                 pdf: path.basename(splitPdf.pdf),
                 documentData: { ...splitPdfData.documentData, split: true },
                 retries: 0
               }
-              saveJsonDocument(`${jobDir}/syncStudentData/${path.basename(splitPdf.pdf).substring(0, path.basename(splitPdf.pdf).lastIndexOf('.'))}.json`, jsonFile)
+              moveToNextJob(jsonData, false, jobDir, 'syncStudentData')
+
             } catch (error) {
               console.log(error)
             }
@@ -77,13 +79,14 @@ module.exports = async () => {
           // Get data
           try {
             pdfData.documentData = await findDocumentData[options.findDataMethod](method, pdfData.pdfText)
-            moveToFolder(pdf, `${jobDir}/syncStudentData`)
-            const jsonFile = {
+            
+            const jsonData = {
               pdf: path.basename(pdfData.pdfName),
               documentData: pdfData.documentData,
               retries: 0
             }
-            saveJsonDocument(`${jobDir}/syncStudentData/${path.basename(pdfData.pdfName).substring(0, path.basename(pdfData.pdfName).lastIndexOf('.'))}.json`, jsonFile)
+            moveToNextJob(jsonData, false, jobDir, 'syncStudentData')
+
           } catch (error) {
             console.log(error)
           }
