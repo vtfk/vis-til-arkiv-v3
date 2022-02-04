@@ -13,7 +13,7 @@
   "author": "jorgen.thorsnes@gmail.com",
   "license": "MIT",
   "dependencies": {
-    "@vtfk/logger": "^4.0.0",
+    "@vtfk/logger": "^4.1.2",
     "@vtfk/pdf-splitter": "^1.0.3",
     "@vtfk/pdf-text-reader": "^1.0.3",
     "axios": "^0.24.0",
