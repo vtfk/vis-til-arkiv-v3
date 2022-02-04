@@ -103,8 +103,5 @@ dist
 # TernJS port file
 .tern-port
 
-# Production archiveMethods
-archiveMethods.js
-
 # Pdfs
 *.pdf
