@@ -16,8 +16,8 @@ module.exports = {
   typeSearchWord: process.env.TYPE_SEARCH_WORD || 'VIS MAL TYPE',
   statFile: process.env.STAT_FILE || 'C:/VisTilArkiv/stat.json',
   deleteFinishedJobs: process.env.DELETE_FINISHED_JOBS || false,
-  retryCount: 3, // don't set longer than retryTime.length
-  retryTime: [5, 60, 240], // minutes
+  retryCount: 4, // don't set longer than retryTime.length
+  retryTime: [5, 60, 240, 1440], // minutes
   p360: {
     syncElevmappeUrl: process.env.P360_SYNCELEVMAPPE_URL || 'syncelevmappe.<domain>.no/api/v1/SyncElevmappe',
     syncElevmappeKey: process.env.P360_SYNCELEVMAPPE_KEY || 'asfdfhdskjgfkjdfgjkfglkjhdflkgdf23',
