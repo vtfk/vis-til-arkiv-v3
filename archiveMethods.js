@@ -103,7 +103,7 @@ const archiveMethods = {
     manualSvarUt: false
   },
   VISVarsel: {
-    active: false,
+    active: true,
     id: 'VISVarsel',
     name: 'Varsel om fare for manglende vurderingsgrunnlag i fag  - VO (voksenopplæring)',
     findDataMethod: 'visVarselDoc',
