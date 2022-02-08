@@ -59,6 +59,7 @@ module.exports = async () => {
         try {
           fs.unlinkSync(`${jobDir}/${json.pdf}`)
           fs.unlinkSync(jsonFile)
+          await logger('info', ['Vis-til-Arkiv', `Done with ${jsonFile}, all good - deleted jobfiles.`])
         } catch (error) {
           await teamsError('Failed when deleting finished job', jsonFile, error)
           await logger('error', ['Vis-til-Arkiv', 'error when deleting finished files', error])
