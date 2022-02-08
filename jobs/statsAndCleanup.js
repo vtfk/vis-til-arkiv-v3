@@ -17,35 +17,26 @@ module.exports = async () => {
       const json = require(jsonFile) // Get json as object
 
       if (!shouldRun(json.nextTry)) continue
-
-      if (!json.e18jobId) {
+      if (!json.e18taskId) {
         try {
           if (!json.archive) throw new Error(`${jsonFile} is missing required property "archive", something is not right`)
           // Post stats to E18
           const svarutRes = ('svarut' in json) ? json.svarut : false
-          const e18job = {
-            e18: false,
-            projectId: 162,
-            system: 'vis-til-arkiv',
-            tasks: [
-              {
-                method: options.name,
-                regarding: `privatePersonRecno: ${json.privatePerson.recno}`,
-                status: 'completed',
-                system: 'vis-til-arkiv',
-                tags: [
-                  `dokumenttype: ${json.documentData.documentType}`,
-                  `p360Title: ${json.metadata.Title}`,
-                  `svarut: ${svarutRes}`,
-                  `DocumentNumber: ${json.archive.DocumentNumber}`,
-                  `pdfName: ${json.pdf}`
-                ]
-              }
-            ],
-            type: 'Arkivering'
-          }
-          const e18Res = await axios.post(`${e18.url}/jobs`, e18job, { headers: { [e18.headerName]: e18.key } })
-          json.e18jobId = e18Res.data._id
+          const e18task = {
+              method: options.name,
+              regarding: `privatePersonRecno: ${json.privatePerson.recno}`,
+              status: 'completed',
+              system: 'vis-til-arkiv',
+              tags: [
+                `dokumenttype: ${json.documentData.documentType}`,
+                `p360Title: ${json.metadata.Title}`,
+                `svarut: ${svarutRes}`,
+                `DocumentNumber: ${json.archive.DocumentNumber}`,
+                `pdfName: ${json.pdf}`
+              ]
+            }
+          const e18Res = await axios.post(`${e18.url}/jobs/${json.e18jobId}/tasks`, e18task, { headers: { [e18.headerName]: e18.key } })
+          json.e18taskId = e18Res.data._id
           // Delete data, everything is done
         } catch (error) {
           await handleError(json, jsonFile, jobDir, 'Failed when creating job on E18', error, true)

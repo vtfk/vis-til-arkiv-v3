@@ -75,7 +75,7 @@ module.exports = async () => {
 
               jsonData.documentData = { ...splitPdfData.documentData, split: true }
 
-              moveToNextJob(jsonData, false, jobDir, 'syncStudentData')
+              moveToNextJob(jsonData, false, jobDir, 'createE18job')
             } catch (error) {
               await handleError(jsonData, false, jobDir, 'Failed when finding documentData', error, false)
               continue
@@ -90,7 +90,7 @@ module.exports = async () => {
           try {
             pdfData.documentData = await findDocumentData[options.findDataMethod](method, pdfData.pdfText)
             jsonData.documentData = pdfData.documentData
-            moveToNextJob(jsonData, false, jobDir, 'syncStudentData')
+            moveToNextJob(jsonData, false, jobDir, 'createE18job')
           } catch (error) {
             await handleError(jsonData, false, jobDir, 'Failed when finding documentData', error, false)
             continue

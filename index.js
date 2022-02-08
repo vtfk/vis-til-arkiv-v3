@@ -2,6 +2,7 @@
   const dispatchDocuments = require('./jobs/dispatchDocuments')
   const getData = require('./jobs/getData')
   const syncStudentData = require('./jobs/syncStudentData')
+  const creatE18job = require('./jobs/createE18job')
   const getArchiveMetadata = require('./jobs/getArchiveMetadata')
   const archiveDocument = require('./jobs/archiveDocument')
   const svarut = require('./jobs/svarut')
@@ -21,6 +22,12 @@
   } catch (error) {
     logger('error', ['Vis-til-Arkiv', 'Failed when getting document data from pdfs', error.toString()])
     await teamsError('Failed when getting document data from pdfs', rootDirectory, error)
+  }
+  try {
+    await creatE18job()
+  } catch (error) {
+    logger('error', ['Vis-til-Arkiv', 'Failed when creating E18job', error.toString()])
+    await teamsError('Failed when creating E18job', rootDirectory, error)
   }
   try {
     await syncStudentData()
