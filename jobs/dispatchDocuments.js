@@ -76,10 +76,10 @@ module.exports = async () => {
 
       if (foundTypes.length === 0) {
         logger('info', ['Vis-til-Arkiv', `Could not find any documenttype for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
-        await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
+        await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
       } else {
         logger('warn', ['Vis-til-Arkiv', `Found several documenttypes for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
-        await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`, pdf)
+        await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
       }
     }
   }
