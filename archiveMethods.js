@@ -48,7 +48,7 @@ const archiveMethods = {
     id: 'VIS005',
     name: 'Godkjenning av tidligere beståtte fag',
     findDataMethod: 'soknad',
-    archiveTemplate: 'godkjenning-tidligere-bestatte-fag',
+    archiveTemplate: 'godkjenning-tidl-bestatte-fag',
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
@@ -74,7 +74,7 @@ const archiveMethods = {
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
-    manualSvarUt: true,
+    manualSvarUt: false,
     schoolOrgnr: '62000', // optional, overrides school found in document
     accessGroup: 'Eksamen' // optional, overrides accessgroup found in document
   },
@@ -83,7 +83,7 @@ const archiveMethods = {
     id: 'VIS009',
     name: 'Godkjenning av tidligere beståtte fag - VO (voksenopplæring)',
     findDataMethod: 'soknad',
-    archiveTemplate: 'godkjenning-tidligere-bestatte-fag-vo',
+    archiveTemplate: 'godkjenning-tidl-bestatte-fag-vo',
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
