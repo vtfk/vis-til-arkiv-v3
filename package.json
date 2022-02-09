@@ -4,7 +4,8 @@
   "description": "Archive documents from Visma InSchool to Public 360",
   "main": "index.js",
   "scripts": {
-    "test": "standard && jest"
+    "test": "standard --fix && jest",
+    "test-jest": "jest"
   },
   "keywords": [
     "archive",
