@@ -23,18 +23,18 @@ module.exports = async () => {
           // Post stats to E18
           const svarutRes = ('svarut' in json) ? json.svarut : false
           const e18task = {
-              method: options.name,
-              regarding: `privatePersonRecno: ${json.privatePerson.recno}`,
-              status: 'completed',
-              system: 'vis-til-arkiv',
-              tags: [
+            method: options.name,
+            regarding: `privatePersonRecno: ${json.privatePerson.recno}`,
+            status: 'completed',
+            system: 'vis-til-arkiv',
+            tags: [
                 `dokumenttype: ${json.documentData.documentType}`,
                 `p360Title: ${json.metadata.Title}`,
                 `svarut: ${svarutRes}`,
                 `DocumentNumber: ${json.archive.DocumentNumber}`,
                 `pdfName: ${json.pdf}`
-              ]
-            }
+            ]
+          }
           const e18Res = await axios.post(`${e18.url}/jobs/${json.e18jobId}/tasks`, e18task, { headers: { [e18.headerName]: e18.key } })
           json.e18taskId = e18Res.data._id
           // Delete data, everything is done

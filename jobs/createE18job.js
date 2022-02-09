@@ -12,7 +12,7 @@ module.exports = async () => {
     const jsons = getFilesInFolder(jobDir, 'json')
     for (const jsonFile of jsons) { // For each json of the document type
       const json = require(jsonFile) // Get json as object
-      
+
       if (!shouldRun(json.nextTry)) continue
 
       if (!json.e18jobId) {

@@ -17,9 +17,9 @@ module.exports = async () => {
         try {
           // Post stats to E18
           const e18task = {
-              method: 'syncElevmappe',
-              system: 'p360'
-            }
+            method: 'syncElevmappe',
+            system: 'p360'
+          }
           const e18Res = await axios.post(`${e18.url}/jobs/${json.e18jobId}/tasks`, e18task, { headers: { [e18.headerName]: e18.key } })
           json.e18taskSyncElevmappeId = e18Res.data._id
           // Delete data, everything is done
