@@ -117,7 +117,7 @@ const archiveMethods = {
     accessGroup: 'Elev Kompetansebyggeren' // optional, overrides accessgroup found in document
   },
   VISKarakterutskrift: {
-    active: true,
+    active: false,
     id: 'VISKarakterutskrift',
     name: 'VIS Karakterutskrift',
     findDataMethod: 'visKarakterutskrift',
