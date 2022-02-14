@@ -1,6 +1,6 @@
 {
   "name": "vis-til-arkiv-v3",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Archive documents from Visma InSchool to Public 360",
   "main": "index.js",
   "scripts": {
