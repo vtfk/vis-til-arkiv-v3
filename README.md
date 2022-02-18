@@ -97,6 +97,21 @@ VIS001: {
     manualSvarUt: false
   }
 ```
+**Example method with splitting enabled**
+```js
+VISVarsel: {
+    active: true,
+    id: 'VISVarsel', 
+    name: 'Varsel om fare for regn',
+    findDataMethod: 'visVarselDoc', // note that the findDataMethod must check if documents need to be splitted
+    identifierStrings: ['Varsel om fare', 'yr'],
+    splitStrings: ['Varsel', 'om fare', 'for regn i dag'], // The split strings are words and sentences present on the page you want to split on
+    archiveTemplate: 'varsel-fare', 
+    svarUt: false, 
+    manualSvarUt: false, 
+}
+```
+
 
 ### Set up archvive template
 Create a json file inside the *./templates directory*, reference the template in the corresponding archive method
@@ -150,7 +165,7 @@ Create a json file inside the *./templates directory*, reference the template in
 - Else
     - Move to delete, and send email to user that sent document
 
-*If you already know the document-type, you could should put it in the next job and skip this step*
+*If you already know the document-type, you could just put it in the next job and skip this step*
 ### 2. Get data
 - For each archive method
     - For each pdf in archive method get-data folder
