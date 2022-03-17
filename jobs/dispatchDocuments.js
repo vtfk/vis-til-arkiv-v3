@@ -1,8 +1,8 @@
 const pdfReader = require('@vtfk/pdf-text-reader')
 const { getFilesInFolder, moveToFolder, getEmailFromFileName, getFileName, getDocumentTypeDir, createSubFolder } = require('../lib/fileAndfolderActions')
 const { teamsInfo } = require('../lib/teamsActions')
-const { emailUnrecognizedDocument } = require('../lib/sendEmail')
-const { dispatchDirectoryName, typeSearchWord, documentDirectoryName, deleteDirectoryName, rootDirectory } = require('../config')
+const { emailUnrecognizedDocument, emailServiceUnavailable } = require('../lib/sendEmail')
+const { dispatchDirectoryName, typeSearchWord, documentDirectoryName, deleteDirectoryName, rootDirectory, unavailable } = require('../config')
 const { logger } = require('@vtfk/logger')
 const { archiveMethods, visStandardDocs } = require('../archiveMethods')
 
@@ -60,7 +60,7 @@ module.exports = async () => {
     foundTypes = foundTypes.concat(checkSoknad(pdfStrings))
     foundTypes = foundTypes.concat(checkIdentifierStrings(pdfStrings))
 
-    if (foundTypes.length === 1) {
+    if (foundTypes.length === 1 && !unavailable) {
       createSubFolder(getDocumentTypeDir(foundTypes[0], true))
       moveToFolder(pdf, `${getDocumentTypeDir(foundTypes[0])}/getData`)
       logger('info', ['Vis-til-Arkiv', `Found documenttype ${foundTypes[0]} and moved pdf ${pdf} to folder ${getDocumentTypeDir(foundTypes[0])}/getData`])
@@ -72,7 +72,11 @@ module.exports = async () => {
       const userEmailAddress = getEmailFromFileName(pdf)
       const filename = getFileName(pdf)
 
-      emailUnrecognizedDocument(userEmailAddress, filename)
+      if (unavailable) {
+        emailServiceUnavailable(userEmailAddress, filename)
+      } else {
+        emailUnrecognizedDocument(userEmailAddress, filename)
+      }
 
       if (foundTypes.length === 0) {
         logger('info', ['Vis-til-Arkiv', `Could not find any documenttype for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])

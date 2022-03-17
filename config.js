@@ -1,6 +1,7 @@
 require('dotenv').config()
 
 module.exports = {
+  unavailable: true, // if the service should send email to user that it is unavailable, instead of archiving
   email: {
     fileNameEmailSeparator: process.env.FILE_NAME_EMAIL_SEPARATOR || '---',
     smtpHost: process.env.SMTP_HOST || 'smtp.mail.com',
