@@ -2,7 +2,7 @@ const { archiveMethods } = require('../archiveMethods')
 const { soknad, visVarselDoc, visKarakterutskrift } = require('../lib/findDocumentData')
 
 // Soknad
-const soknadStrings = ['Fødselsnummer: 12345678910', 'Skole: Færder videregående skole', 'Dato: 01.01.1998']
+const soknadStrings = ['Fødselsnummer: 12345678910', 'Skole: Færder videregående skole', 'Dato: 01.01.1998', 'Elevens navn: Bjørge Trynesen']
 const expectSoknadRes = {
   ssn: '12345678910',
   documentDate: '1998-01-01',
@@ -10,10 +10,10 @@ const expectSoknadRes = {
   schoolOrgNr: '974575086',
   schoolAccessGroup: 'Elev Færder vgs'
 }
-const soknadStringsDuplicatePropButSameVal = ['Fødselsnummer: 12345678910', 'Fødselsnummer: 12345678910', 'Skole: Færder videregående skole', 'Dato: 01.01.1998']
-const soknadStringsDuplicatePropDiffVal = ['Fødselsnummer: 12345678910', 'Fødselsnummer: 22222222222', 'Skole: Færder videregående skole', 'Dato: 01.01.1998']
-const soknadStringsMissingProp = ['Skole: Færder videregående skole', 'Dato: 01.01.1998']
-const soknadStringsNotValidSchool = ['Fødselsnummer: 12345678910', 'Skole: Livets skole', 'Dato: 01.01.1998']
+const soknadStringsDuplicatePropButSameVal = ['Fødselsnummer: 12345678910', 'Fødselsnummer: 12345678910', 'Skole: Færder videregående skole', 'Dato: 01.01.1998', 'Elevens navn: Bjørge Trynesen']
+const soknadStringsDuplicatePropDiffVal = ['Fødselsnummer: 12345678910', 'Fødselsnummer: 22222222222', 'Skole: Færder videregående skole', 'Dato: 01.01.1998', 'Elevens navn: Bjørge Trynesen']
+const soknadStringsMissingProp = ['Skole: Færder videregående skole', 'Dato: 01.01.1998', 'Elevens navn: Bjørge Trynesen']
+const soknadStringsNotValidSchool = ['Fødselsnummer: 12345678910', 'Skole: Livets skole', 'Dato: 01.01.1998', 'Elevens navn: Bjørge Trynesen']
 
 // visVarselDoc
 const visVarselStrings = ['Elev: Bjarne Betjent Klasse: 2STA Fødselsdato: 29/01/1995', 'Fag:NOR1264 Norsk, skriftlig', 'Kompetansebyggeren', 'Sted: Stathelle Dato: 02.11.2021', 'Varsel om fare for manglende vurderingsgrunnlag i fag']
@@ -32,7 +32,7 @@ const visVarselStringsDuplicatePropDiffVal = ['Elev: Bjarne Betjent Klasse: 2STA
 const visVarselStringsMissingProp = ['Fag:NOR1264 Norsk, skriftlig', 'Kompetansebyggeren', 'Sted: Stathelle Dato: 02.11.2021', 'Varsel om fare for manglende vurderingsgrunnlag i fag']
 
 // visKarakterutskrift
-const karakterStrings = ['Fødselsnummer: 12345678910', 'Færder videregående skole', '01.01.1998', 'Halvår 1', 'blablabla']
+const karakterStrings = ['Fødselsnummer: 12345678910', 'Færder videregående skole', '01.01.1998', 'Halvår 1', 'blablabla', 'Navn: Bjørge Flatlus']
 const expectKarakterRes = {
   ssn: '12345678910',
   documentDate: '1998-01-01',
@@ -41,9 +41,9 @@ const expectKarakterRes = {
   schoolAccessGroup: 'Elev Færder vgs',
   type: 'T1'
 }
-const karakterStringsWithDuplicatePropButSameVal = ['Fødselsnummer: 12345678910', 'Fødselsnummer: 12345678910', 'Færder videregående skole', '01.01.1998', 'Halvår 1', 'blablabla']
-const karakterStringsWithDuplicatePropDiffVal = ['Fødselsnummer: 12345678910', 'Fødselsnummer: 22222222222', 'Færder videregående skole', '01.01.1998', 'Halvår 1', 'blablabla']
-const karakterStringsMissingProp = ['Færder videregående skole', '01.01.1998', 'Halvår 1', 'blablabla']
+const karakterStringsWithDuplicatePropButSameVal = ['Fødselsnummer: 12345678910', 'Fødselsnummer: 12345678910', 'Færder videregående skole', '01.01.1998', 'Halvår 1', 'blablabla', 'Navn: Bjørge Flatlus']
+const karakterStringsWithDuplicatePropDiffVal = ['Fødselsnummer: 12345678910', 'Fødselsnummer: 22222222222', 'Færder videregående skole', '01.01.1998', 'Halvår 1', 'blablabla', 'Navn: Bjørge Flatlus']
+const karakterStringsMissingProp = ['Færder videregående skole', '01.01.1998', 'Halvår 1', 'blablabla', 'Navn: Bjørge Flatlus']
 
 describe('Finds correct data for archivemethod', () => {
   test('soknad', () => {
