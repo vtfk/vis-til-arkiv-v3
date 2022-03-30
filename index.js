@@ -1,6 +1,8 @@
 (async () => {
   const dispatchDocuments = require('./jobs/dispatchDocuments')
+  const dispatchOcrDocuments = require('./jobs/dispatchOcrDocuments')
   const getData = require('./jobs/getData')
+  const ocrGetData = require('./jobs/ocrGetData')
   const syncStudentData = require('./jobs/syncStudentData')
   const creatE18job = require('./jobs/createE18job')
   const getArchiveMetadata = require('./jobs/getArchiveMetadata')
@@ -18,10 +20,22 @@
     await teamsError('Failed when dispatching documents to type folders', rootDirectory, error)
   }
   try {
+    await dispatchOcrDocuments()
+  } catch (error) {
+    logger('error', ['Vis-til-Arkiv', 'Failed when dispatching OCR documents to type-folders', error.toString()])
+    await teamsError('Failed when dispatching OCR documents to type folders', rootDirectory, error)
+  }
+  try {
     await getData()
   } catch (error) {
     logger('error', ['Vis-til-Arkiv', 'Failed when getting document data from pdfs', error.toString()])
     await teamsError('Failed when getting document data from pdfs', rootDirectory, error)
+  }
+  try {
+    await ocrGetData()
+  } catch (error) {
+    logger('error', ['Vis-til-Arkiv', 'Failed when getting document data from ocr-pdfs', error.toString()])
+    await teamsError('Failed when getting document data from ocr-pdfs', rootDirectory, error)
   }
   try {
     await creatE18job()
