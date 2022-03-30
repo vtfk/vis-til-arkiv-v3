@@ -16,6 +16,8 @@ module.exports = async () => {
       try {
         if (!json.metadata) throw new Error(`${jsonFile} is missing required property "metadata", something is not right`)
 
+        if (json.documentData.pages && archiveMethods[method].pageLimit && json.documentData.pages > archiveMethods[method].pageLimit) throw new Error(`Number of pages are too much for archivemethod ${method}, with a limit of ${archiveMethods[method].pageLimit}`)
+
         const archiveRes = await axios.post(`${p360.archiveDocUrl}${p360.archiveQueryString}${p360.archiveKey}`, { parameter: json.metadata })
 
         if (!archiveRes.data.Successful) {
