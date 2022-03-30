@@ -3,7 +3,14 @@ const { archiveMethods } = require('../archiveMethods')
 const { getFilesInFolder } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError, shouldRun } = require('../lib/jobTools')
 const { rootDirectory, documentDirectoryName, p360, e18 } = require('../config')
+const { logger } = require('@vtfk/logger')
 const axios = require('axios')
+
+const verifyStudentData = (input, output) => {
+  if (input.firstName !== output.firstName) throw new Error('Firstnames do not match - please check manually')
+  if (input.lastName !== output.lastName) throw new Error('Lastnames do not match - please check manually')
+  logger('info', ['Vis-til-Arkiv', 'Successfully verified firstname and lastname through DSF'])
+}
 
 module.exports = async () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
@@ -33,6 +40,9 @@ module.exports = async () => {
         if (!json.documentData.ssn && !(json.documentData.birthdate && json.documentData.firstName && json.documentData.lastName)) throw new Error(`${jsonFile} is missing required property "documentData.ssn" or ("documentData.birthdate" and "documentData.firstName" and "documentData.lastName"), something is not right`)
         const studentIdentifer = json.documentData.ssn ? { ssn: json.documentData.ssn } : { birthdate: json.documentData.birthdate, firstName: json.documentData.firstName, lastName: json.documentData.lastName }
         const syncElevmappeRes = await axios.post(p360.syncElevmappeUrl, studentIdentifer, { headers: { [p360.syncElevmappeHeaderName]: p360.syncElevmappeKey, e18jobId: json.e18jobId, e18taskId: json.e18taskSyncElevmappeId } })
+        if (json.documentData.ocr) {
+          verifyStudentData({ firstName: json.documentData.firstName, lastName: json.documentData.lastName }, { firstName: syncElevmappeRes.data.privatePerson.firstName, lastName: syncElevmappeRes.data.privatePerson.lastName })
+        }
         moveToNextJob({ ...json, ...syncElevmappeRes.data }, jsonFile, jobDir, 'getArchiveMetadata')
       } catch (error) {
         await handleError(json, jsonFile, jobDir, 'Failed when synchronizing elevmappe', error, true)
