@@ -2,10 +2,11 @@ const { archiveMethods } = require('../archiveMethods')
 const { getFilesInFolder } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError, shouldRun, writeLocalStats } = require('../lib/jobTools')
 const { teamsError } = require('../lib/teamsActions')
-const { rootDirectory, documentDirectoryName, e18, deleteFinishedJobs } = require('../config')
+const { rootDirectory, documentDirectoryName, e18, deleteFinishedJobs, originalsDirectoryName } = require('../config')
 const axios = require('axios')
 const { logger } = require('@vtfk/logger')
 const fs = require('fs')
+const path = require('path')
 
 module.exports = async () => {
   const stats = {} // Initialize stats for the job
@@ -59,6 +60,7 @@ module.exports = async () => {
         try {
           fs.unlinkSync(`${jobDir}/${json.pdf}`)
           fs.unlinkSync(jsonFile)
+          if (json.documentData.ocr) fs.unlinkSync(`${rootDirectory}/${originalsDirectoryName}/${path.basename(json.pdf)}`)
           await logger('info', ['Vis-til-Arkiv', `Done with ${jsonFile}, all good - deleted jobfiles.`])
         } catch (error) {
           await teamsError('Failed when deleting finished job', jsonFile, error)
@@ -66,6 +68,7 @@ module.exports = async () => {
         }
       } else {
         moveToNextJob(json, jsonFile, jobDir, 'imported')
+        if (json.documentData.ocr) fs.renameSync(`${rootDirectory}/${originalsDirectoryName}/${path.basename(json.pdf)}`, `${jobDir.substring(0, jobDir.lastIndexOf('/'))}/imported/${path.basename(json.pdf).substring(0, path.basename(json.pdf).lastIndexOf('.'))}-ORIGINAL.pdf`) // Holy shit
       }
     }
   }
