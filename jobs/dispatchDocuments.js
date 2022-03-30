@@ -1,8 +1,8 @@
 const pdfReader = require('@vtfk/pdf-text-reader')
-const { getFilesInFolder, moveToFolder, getEmailFromFileName, getFileName, getDocumentTypeDir, createSubFolder } = require('../lib/fileAndfolderActions')
+const { getFilesInFolder, moveToFolder, getEmailFromFileName, getFileName, getDocumentTypeDir, createSubFolder, copyFile } = require('../lib/fileAndfolderActions')
 const { teamsInfo } = require('../lib/teamsActions')
 const { emailUnrecognizedDocument, emailServiceUnavailable } = require('../lib/sendEmail')
-const { dispatchDirectoryName, typeSearchWord, documentDirectoryName, deleteDirectoryName, rootDirectory, unavailable } = require('../config')
+const { dispatchDirectoryName, typeSearchWord, documentDirectoryName, deleteDirectoryName, rootDirectory, unavailable, useOcr, ocrInputDirectory, originalsDirectoryName } = require('../config')
 const { logger } = require('@vtfk/logger')
 const { archiveMethods, visStandardDocs } = require('../archiveMethods')
 
@@ -48,6 +48,7 @@ module.exports = async () => {
   createSubFolder(dispatchDirectoryName)
   createSubFolder(documentDirectoryName)
   createSubFolder(deleteDirectoryName)
+  createSubFolder(originalsDirectoryName)
 
   const listOfPdfs = getFilesInFolder(`${rootDirectory}/${dispatchDirectoryName}`, 'pdf')
   logger('info', ['Vis-til-Arkiv', `Found ${listOfPdfs.length} pdfs in VIStilArkiv dispatch folder`])
@@ -65,25 +66,31 @@ module.exports = async () => {
       moveToFolder(pdf, `${getDocumentTypeDir(foundTypes[0])}/getData`)
       logger('info', ['Vis-til-Arkiv', `Found documenttype ${foundTypes[0]} and moved pdf ${pdf} to folder ${getDocumentTypeDir(foundTypes[0])}/getData`])
     } else {
-      moveToFolder(pdf, `${rootDirectory}/${deleteDirectoryName}`)
-
       const strippedPdfContent = pdfStrings.join(' ').replace(/[0-9]/g, '').substring(0, 50)
-
-      const userEmailAddress = getEmailFromFileName(pdf)
-      const filename = getFileName(pdf)
-
-      if (unavailable) {
-        emailServiceUnavailable(userEmailAddress, filename)
+      if (useOcr && !unavailable) {
+        copyFile(pdf, `${rootDirectory}/${originalsDirectoryName}`)
+        moveToFolder(pdf, ocrInputDirectory)
+        logger('info', ['Vis-til-Arkiv', `Could not find any documenttype for pdf ${pdf}, moved to folder ${ocrInputDirectory} and will try to run OCR on the document to see if that helps`])
+        await teamsInfo(`Could not find any documenttype for pdf ${pdf}, moved to folder ${ocrInputDirectory} and will try to run OCR on the document to see if that helps`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
       } else {
-        emailUnrecognizedDocument(userEmailAddress, filename)
-      }
+        moveToFolder(pdf, `${rootDirectory}/${deleteDirectoryName}`)
 
-      if (foundTypes.length === 0) {
-        logger('info', ['Vis-til-Arkiv', `Could not find any documenttype for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
-        await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
-      } else {
-        logger('warn', ['Vis-til-Arkiv', `Found several documenttypes for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
-        await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
+        const userEmailAddress = getEmailFromFileName(pdf)
+        const filename = getFileName(pdf)
+
+        if (unavailable) {
+          emailServiceUnavailable(userEmailAddress, filename)
+        } else {
+          emailUnrecognizedDocument(userEmailAddress, filename)
+        }
+
+        if (foundTypes.length === 0) {
+          logger('info', ['Vis-til-Arkiv', `Could not find any documenttype for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
+          await teamsInfo(`Could not find documenttype, sent email to ${userEmailAddress}`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
+        } else {
+          logger('warn', ['Vis-til-Arkiv', `Found several documenttypes for pdf ${pdf}, moved to folder ${rootDirectory}/${deleteDirectoryName} and sent email to ${userEmailAddress}`])
+          await teamsInfo(`Found SEVERAL documenttypes, sent email to ${userEmailAddress}`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
+        }
       }
     }
   }
