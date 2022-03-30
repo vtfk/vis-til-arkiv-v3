@@ -52,7 +52,7 @@ module.exports = async () => {
             // Move splitted pdf to finished folder
             moveToFolder(pdf, `${jobDir}/splitted`)
           }
-          console.log(result)
+          // console.log(result)
           for (const splitPdf of result.success) {
             const splitPdfData = {
               pdf: path.basename(splitPdf.pdf),
