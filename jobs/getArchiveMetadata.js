@@ -1,8 +1,9 @@
 const { archiveMethods } = require('../archiveMethods')
 const { getFilesInFolder, convertToBase64 } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError, shouldRun } = require('../lib/jobTools')
-const { rootDirectory, documentDirectoryName } = require('../config')
+const { rootDirectory, documentDirectoryName, originalsDirectoryName } = require('../config')
 const createMetadata = require('../lib/createMetadata')
+const path = require('path')
 
 module.exports = async () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
@@ -15,6 +16,8 @@ module.exports = async () => {
         if (!json.privatePerson) throw new Error(`${jsonFile} is missing required property "privatePerson", something is not right`)
         if (!json.privatePerson.ssn) throw new Error(`${jsonFile} is missing required property "privatePerson.ssn", something is not right`)
 
+        const pdfFile = (json.documentData.ocr && archiveMethods[method].archiveOriginal) ? `${rootDirectory}/${originalsDirectoryName}/${path.basename(json.pdf)}` : `${jobDir}/${json.pdf}` // If OCR was used, we might want to archive the original document instead
+
         const metadataInput = {
           template: require(`../templates/${options.archiveTemplate}.json`),
           documentData: {
@@ -22,7 +25,7 @@ module.exports = async () => {
             studentName: `${json.privatePerson.firstName} ${json.privatePerson.lastName}`,
             elevmappeCaseNumber: json.elevmappe.CaseNumber,
             ssn: json.privatePerson.ssn,
-            pdfFileBase64: convertToBase64(`${jobDir}/${json.pdf}`)
+            pdfFileBase64: convertToBase64(pdfFile)
           }
         }
 
