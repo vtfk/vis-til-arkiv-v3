@@ -8,7 +8,9 @@ const archiveMethods = {
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
-    manualSvarUt: false
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VIS002: {
     active: true,
@@ -19,7 +21,9 @@ const archiveMethods = {
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
-    manualSvarUt: false
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VIS003: {
     active: true,
@@ -30,7 +34,9 @@ const archiveMethods = {
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
-    manualSvarUt: false
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VIS004: {
     active: true,
@@ -41,7 +47,9 @@ const archiveMethods = {
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
-    manualSvarUt: false
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VIS005: {
     active: true,
@@ -52,7 +60,9 @@ const archiveMethods = {
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
-    manualSvarUt: false
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VIS006: {
     active: true,
@@ -63,7 +73,9 @@ const archiveMethods = {
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
-    manualSvarUt: false
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VIS007: {
     active: true,
@@ -76,7 +88,9 @@ const archiveMethods = {
     svarUt: true,
     manualSvarUt: false,
     schoolOrgnr: '62000', // optional, overrides school found in document
-    accessGroup: 'Eksamen' // optional, overrides accessgroup found in document
+    accessGroup: 'Eksamen', // optional, overrides accessgroup found in document
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VIS009: {
     active: true,
@@ -89,7 +103,9 @@ const archiveMethods = {
     svarUt: true,
     manualSvarUt: false,
     schoolOrgnr: '994309153', // optional, overrides school found in document
-    accessGroup: 'Elev Kompetansebyggeren' // optional, overrides accessgroup found in document
+    accessGroup: 'Elev Kompetansebyggeren', // optional, overrides accessgroup found in document
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VIS011: {
     active: true,
@@ -100,7 +116,9 @@ const archiveMethods = {
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
-    manualSvarUt: false
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VISVarsel: {
     active: true,
@@ -114,18 +132,23 @@ const archiveMethods = {
     svarUt: false,
     manualSvarUt: false,
     schoolOrgnr: '994309153', // optional, overrides school found in document
-    accessGroup: 'Elev Kompetansebyggeren' // optional, overrides accessgroup found in document
+    accessGroup: 'Elev Kompetansebyggeren', // optional, overrides accessgroup found in document
+    archiveOriginal: true,
+    archiveOcr: false
   },
   VISKarakterutskrift: {
-    active: false,
+    active: true,
     id: 'VISKarakterutskrift',
     name: 'VIS Karakterutskrift',
     findDataMethod: 'visKarakterutskrift',
-    identifierStrings: ['Karakterutskrift', 'Navn:', 'Fødselsnummer:', 'Programområde:', 'Karakter', 'Fravær hele dager', 'Fravær enkelttimer', 'Atferd'],
+    identifierStrings: ['Karakterutskrift', 'Navn:', 'Fødselsnummer:', 'Programområde:', 'Karakter', 'Fravær', 'hele dager', 'enkelttimer', 'Signatur'],
     splitStrings: ['Karakterutskrift', 'Navn:', 'Fødselsnummer:'],
     archiveTemplate: 'karakterutskrift',
     svarUt: false,
-    manualSvarUt: false
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false,
+    pageLimit: 1
   }
 }
 const standardDocs = ['visVarselDoc', 'visKarakterutskrift']
