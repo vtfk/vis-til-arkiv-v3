@@ -25,7 +25,7 @@ module.exports = async () => {
         const pdfContent = await pdfReader(pdf, { inferLines: { normalizeY: true } }) // read pdf
         pdfContent.textContent.forEach(ele => { if (!pdfData.pages.includes(ele.page)) pdfData.pages.push(ele.page) })
         let pdfStrings = Object.values(pdfContent.lines) // Fetch all the lines as string values
-        pdfStrings = pdfStrings.map(str => str.replace(/[^a-zA-Z0-9ÆØÅæøå:.,\- ]/g, '')) // Remove characters we do not need
+        pdfStrings = pdfStrings.map(str => str.replace(/[^a-zA-Z0-9ÆØÅæøå:.,\-\/ ]/g, '')) // Remove characters we do not need
         pdfStrings = pdfStrings.map(str => str.replace(/\s\s+/g, ' ').trim()) // Remove multiple whitespace possibly created by previous line
         pdfStrings = pdfStrings.map(str => correctSpelling(str))
         pdfData.pdfText = pdfStrings
