@@ -12,7 +12,7 @@ const checkSoknad = (pdfStrings) => {
   for (let i = 0; i < pdfStrings.length; i++) { // Note that field description and value is found in the same element (str) in this documentType, where the description field and values are found is dependent on the structure of the pdf
     if (pdfStrings[i].split(':').length === 2) {
       const desc = pdfStrings[i].split(':')[0].trim()
-      const value = pdfStrings[i].split(':')[1].trim()
+      const value = pdfStrings[i].split(':')[1].trim().substring(0, 6) // Quick-fix, the value for this type always contains six characters
       if (desc === typeSearchWord || similar(desc, typeSearchWord)) {
         if (archiveMethods[value] && !foundTypes.includes(value) && archiveMethods[value].findDataMethod && archiveMethods[value].findDataMethod === 'soknad' && archiveMethods[value].active) foundTypes.push(value)
       }
