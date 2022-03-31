@@ -71,7 +71,7 @@ module.exports = async () => {
         copyFile(pdf, `${rootDirectory}/${originalsDirectoryName}`)
         moveToFolder(pdf, ocrInputDirectory)
         logger('info', ['Vis-til-Arkiv', `Could not find any documenttype for pdf ${pdf}, moved to folder ${ocrInputDirectory} and will try to run OCR on the document to see if that helps`])
-        await teamsInfo(`Could not find any documenttype for pdf ${pdf}, moved to folder ${ocrInputDirectory} and will try to run OCR on the document to see if that helps`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
+        // await teamsInfo(`Could not find any documenttype for pdf ${pdf}, moved to folder ${ocrInputDirectory} and will try to run OCR on the document to see if that helps`, pdf, `PDF content (stripped for numbers, and length 50): ${strippedPdfContent}`)
       } else {
         moveToFolder(pdf, `${rootDirectory}/${deleteDirectoryName}`)
 
