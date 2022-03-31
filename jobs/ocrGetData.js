@@ -87,7 +87,7 @@ module.exports = async () => {
               const splitPdfContent = await pdfReader(splitPdf.pdf, { inferLines: { normalizeY: true } }) // read pdf
               splitPdfContent.textContent.forEach(ele => { if (!splitPdfData.pages.includes(ele.page)) splitPdfData.pages.push(ele.page) })
               let splitPdfStrings = Object.values(splitPdfContent.lines) // Fetch all the lines as string values
-              splitPdfStrings = splitPdfStrings.map(str => str.replace(/[^a-zA-Z0-9ÆØÅæøå:.,\- ]/g, '')) // Remove characters we do not need
+              splitPdfStrings = splitPdfStrings.map(str => str.replace(/[^a-zA-Z0-9ÆØÅæøå:.,\-\/ ]/g, '')) // Remove characters we do not need
               splitPdfStrings = splitPdfStrings.map(str => str.replace(/\s\s+/g, ' ').trim()) // Remove multiple whitespace possibly created by previous line
               splitPdfStrings = splitPdfStrings.map(str => correctSpelling(str))
               splitPdfData.pdfText = splitPdfStrings
