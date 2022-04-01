@@ -1,3 +1,6 @@
+const getSchools = require('vtfk-schools-info')
+const schools = getSchools().map(school => school.fullName)
+
 const wordBook = [
   'Fødselsnummer:',
   'Navn:',
@@ -9,7 +12,8 @@ const wordBook = [
   'Sted:',
   'Skole:'
 ]
-const schools = [
+/*
+const schoolsOld = [
   'Bamble videregående skole',
   'Nøtterøy videregående skole',
   'Horten videregående skole',
@@ -35,8 +39,7 @@ const schools = [
   'Nome videregående skole',
   'Fagskolen Vesfold og Telemark'
 ]
+*/
 const except = [
 ]
 module.exports = { wordBook, except, schools }
-
-// TODO - må nok slutte med ordbok - for mange navn som kødder til...

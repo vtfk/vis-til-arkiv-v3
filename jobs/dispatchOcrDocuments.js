@@ -2,10 +2,12 @@ const pdfReader = require('@vtfk/pdf-text-reader')
 const { getFilesInFolder, moveToFolder, getEmailFromFileName, getFileName, getDocumentTypeDir, createSubFolder } = require('../lib/fileAndfolderActions')
 const { teamsInfo } = require('../lib/teamsActions')
 const { emailUnrecognizedDocument, emailServiceUnavailable } = require('../lib/sendEmail')
-const { ocrDispatchDirectoryName, typeSearchWord, documentDirectoryName, deleteDirectoryName, rootDirectory, unavailable } = require('../config')
+const { ocrDispatchDirectoryName, typeSearchWord, documentDirectoryName, deleteDirectoryName, rootDirectory, unavailable, originalsDirectoryName } = require('../config')
 const { logger } = require('@vtfk/logger')
 const { archiveMethods, visStandardDocs } = require('../archiveMethods')
 const { jwIncludes, jwIncludesSentence, similar } = require('../lib/jaroWinkler')
+const fs = require('fs')
+const path = require('path')
 
 const checkSoknad = (pdfStrings) => {
   const foundTypes = []
@@ -69,6 +71,7 @@ module.exports = async () => {
       logger('info', ['Vis-til-Arkiv', `Found documenttype ${foundTypes[0]} and moved pdf ${pdf} to folder ${getDocumentTypeDir(foundTypes[0])}/ocrGetData`])
     } else {
       moveToFolder(pdf, `${rootDirectory}/${deleteDirectoryName}`)
+      fs.renameSync(`${rootDirectory}/${originalsDirectoryName}/${path.basename(pdf)}`, `${rootDirectory}/${deleteDirectoryName}/${path.basename(pdf).substring(0, path.basename(pdf).lastIndexOf('.'))}-ORIGINAL.pdf`) // Holy shit
 
       const strippedPdfContent = pdfStrings.join(' ').replace(/[0-9]/g, '').substring(0, 50)
 
