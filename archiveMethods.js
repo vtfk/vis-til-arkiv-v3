@@ -137,7 +137,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VISKarakterutskrift: {
-    active: false,
+    active: true,
     id: 'VISKarakterutskrift',
     name: 'VIS Karakterutskrift',
     findDataMethod: 'visKarakterutskrift',
