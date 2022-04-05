@@ -5,11 +5,25 @@ const { moveToNextJob, handleError, shouldRun } = require('../lib/jobTools')
 const { rootDirectory, documentDirectoryName, p360, e18 } = require('../config')
 const { logger } = require('@vtfk/logger')
 const axios = require('axios')
+const { similar } = require('../lib/jaroWinkler')
+const { teamsWarn } = require('../lib/teamsActions')
 
-const verifyStudentData = (input, output) => {
-  if (input.firstName !== output.firstName) throw new Error('Firstnames do not match - please check manually')
-  if (input.lastName !== output.lastName) throw new Error('Lastnames do not match - please check manually')
-  logger('info', ['Vis-til-Arkiv', 'Successfully verified firstname and lastname through DSF'])
+const verifyStudentData = async (input, output, pdf) => {
+  const checks = {
+    firstNames: (input.firstName === output.firstName),
+    lastNames: (input.lastName === output.lastName),
+    similarity: similar(`${input.firstName} ${input.lastName}`, `${output.firstName} ${output.lastName}`, 0.93)
+  }
+  if (checks.firstNames && checks.lastNames) {
+    logger('info', ['Vis-til-Arkiv', 'Successfully verified firstname and lastname through DSF'])
+    return
+  }
+  if (checks.similarity) {
+    logger('info', ['Vis-til-Arkiv', 'Successfully verified firstname and lastname through a similarity check'])
+    await teamsWarn('Verified name through similarity - check names, and if something is fishy, fix it ASAP!', pdf, `PDF name: "${input.firstName} ${input.lastName}", DSF name: "${output.firstName} ${output.lastName}"`)
+    return
+  }
+  throw new Error('Names do not match - please check manually')
 }
 
 module.exports = async () => {
@@ -41,7 +55,7 @@ module.exports = async () => {
         const studentIdentifer = json.documentData.ssn ? { ssn: json.documentData.ssn } : { birthdate: json.documentData.birthdate, firstName: json.documentData.firstName, lastName: json.documentData.lastName }
         const syncElevmappeRes = await axios.post(p360.syncElevmappeUrl, studentIdentifer, { headers: { [p360.syncElevmappeHeaderName]: p360.syncElevmappeKey, e18jobId: json.e18jobId, e18taskId: json.e18taskSyncElevmappeId } })
         if (json.documentData.ocr) {
-          verifyStudentData({ firstName: json.documentData.firstName, lastName: json.documentData.lastName }, { firstName: syncElevmappeRes.data.privatePerson.firstName, lastName: syncElevmappeRes.data.privatePerson.lastName })
+          await verifyStudentData({ firstName: json.documentData.firstName, lastName: json.documentData.lastName }, { firstName: syncElevmappeRes.data.privatePerson.firstName, lastName: syncElevmappeRes.data.privatePerson.lastName }, jsonFile)
         }
         moveToNextJob({ ...json, ...syncElevmappeRes.data }, jsonFile, jobDir, 'getArchiveMetadata')
       } catch (error) {
