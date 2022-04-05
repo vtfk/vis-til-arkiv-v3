@@ -8,7 +8,7 @@ const axios = require('axios')
 const { similar } = require('../lib/jaroWinkler')
 const { teamsWarn } = require('../lib/teamsActions')
 
-const verifyStudentData = async (input, output, pdf) => {
+const verifyStudentData = async (input, output, pdf, svarUt) => {
   const checks = {
     firstNames: (input.firstName === output.firstName),
     lastNames: (input.lastName === output.lastName),
@@ -18,7 +18,7 @@ const verifyStudentData = async (input, output, pdf) => {
     logger('info', ['Vis-til-Arkiv', 'Successfully verified firstname and lastname through DSF'])
     return
   }
-  if (checks.similarity) {
+  if (checks.similarity && !svarUt) {
     logger('info', ['Vis-til-Arkiv', 'Successfully verified firstname and lastname through a similarity check'])
     await teamsWarn('Verified name through similarity - check names, and if something is fishy, fix it ASAP!', pdf, `PDF name: "${input.firstName} ${input.lastName}", DSF name: "${output.firstName} ${output.lastName}"`)
     return
@@ -55,7 +55,7 @@ module.exports = async () => {
         const studentIdentifer = json.documentData.ssn ? { ssn: json.documentData.ssn } : { birthdate: json.documentData.birthdate, firstName: json.documentData.firstName, lastName: json.documentData.lastName }
         const syncElevmappeRes = await axios.post(p360.syncElevmappeUrl, studentIdentifer, { headers: { [p360.syncElevmappeHeaderName]: p360.syncElevmappeKey, e18jobId: json.e18jobId, e18taskId: json.e18taskSyncElevmappeId } })
         if (json.documentData.ocr) {
-          await verifyStudentData({ firstName: json.documentData.firstName, lastName: json.documentData.lastName }, { firstName: syncElevmappeRes.data.privatePerson.firstName, lastName: syncElevmappeRes.data.privatePerson.lastName }, jsonFile)
+          await verifyStudentData({ firstName: json.documentData.firstName, lastName: json.documentData.lastName }, { firstName: syncElevmappeRes.data.privatePerson.firstName, lastName: syncElevmappeRes.data.privatePerson.lastName }, jsonFile, archiveMethods[method].svarUt)
         }
         moveToNextJob({ ...json, ...syncElevmappeRes.data }, jsonFile, jobDir, 'getArchiveMetadata')
       } catch (error) {
