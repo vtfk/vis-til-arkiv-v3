@@ -11,6 +11,7 @@ const { rootDirectory, documentDirectoryName, originalsDirectoryName } = require
 
 module.exports = async () => {
   logger('info', ['Vis-til-Arkiv', 'Starting job ocrSplitDocuments'])
+  const startTime = new Date()
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
     const jobDir = `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/ocrSplitDocuments`
     const pdfs = getFilesInFolder(jobDir, 'pdf')
@@ -80,6 +81,14 @@ module.exports = async () => {
         moveToFolder(sp, `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/ocrGetData`)
       }
       fs.rmdirSync(`${jobDir}/${pdfName}`)
+      const endTime = new Date()
+      const duration = (endTime-startTime)/1000/60
+      if (duration > 240) {
+        logger('warn', ['Vis-til-Arkiv', `Splitter has been running for too long - ending task`])
+        break
+      } else {
+        logger('info', ['Vis-til-Arkiv', `Splitter is still going strong, will keep splitting`])
+      }
     }
   }
 }
