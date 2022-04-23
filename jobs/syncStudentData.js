@@ -19,8 +19,8 @@ const verifyStudentData = async (input, output, pdf, svarUt) => {
     return
   }
   if (checks.similarity && !svarUt) {
-    logger('info', ['Vis-til-Arkiv', 'Successfully verified firstname and lastname through a similarity check'])
-    await teamsWarn('Verified name through similarity - check names, and if something is fishy, fix it ASAP!', pdf, `PDF name: "${input.firstName} ${input.lastName}", DSF name: "${output.firstName} ${output.lastName}"`)
+    logger('info', ['Vis-til-Arkiv', `Successfully verified firstname and lastname through a similarity check - ${input.firstName} similar to ${output.firstName}`])
+    // await teamsWarn('Verified name through similarity - check names, and if something is fishy, fix it ASAP!', pdf, `PDF name: "${input.firstName} ${input.lastName}", DSF name: "${output.firstName} ${output.lastName}"`)
     return
   }
   throw new Error('Names do not match - please check manually')
