@@ -141,7 +141,7 @@ const archiveMethods = {
     id: 'VISKarakterutskrift',
     name: 'VIS Karakterutskrift',
     findDataMethod: 'visKarakterutskrift',
-    identifierStrings: ['Karakterutskrift', 'Navn:', 'Fødselsnummer:', 'Programområde:', 'Karakter', 'Fravær', 'hele dager', 'enkelttimer', 'Signatur'],
+    identifierStrings: ['Karakterutskrift', 'Navn:', 'Fødselsnummer:', 'Programområde:', 'Karakter', 'hele dager', 'enkelttimer', 'Signatur'],
     splitStrings: ['Karakterutskrift', 'Navn:', 'Fødselsnummer:'],
     archiveTemplate: 'karakterutskrift',
     svarUt: false,
