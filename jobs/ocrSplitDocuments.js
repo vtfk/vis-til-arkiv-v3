@@ -33,7 +33,8 @@ module.exports = async () => {
       const pdfToSplit = {
         pdf,
         keywords: options.splitStrings,
-        outputDir: `${jobDir}/${pdfName}` // Optional, defaults to directory of the input pdf
+        outputDir: `${jobDir}/${pdfName}`, // Optional, defaults to directory of the input pdf
+        orKeywords: true
       }
       let splitRanges
       try {
