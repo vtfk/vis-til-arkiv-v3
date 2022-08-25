@@ -30,7 +30,7 @@ module.exports = async () => {
               studentName: `${json.privatePerson.firstName} ${json.privatePerson.lastName}`,
               elevmappeCaseNumber: json.elevmappe.CaseNumber,
               schoolAccessGroup: json.documentData.schoolAccessGroup,
-              schoolOrgNr: json.documentData.schoolOrgnr,
+              schoolOrgNr: json.documentData.schoolOrgNr,
               userEmailAddress: getEmailFromFileName(json.pdf),
               pdfFileBase64: convertToBase64(options.internalNote)
             }
