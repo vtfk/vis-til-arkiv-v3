@@ -19,7 +19,7 @@ const verifyStudentData = async (input, output, pdf, svarUt) => {
     return
   }
   if (checks.similarity) { // Add "&& !svarUt" for stricter similarity check on stuff that is using Svarut
-    logger('info', ['Vis-til-Arkiv', `Successfully verified firstname and lastname through a similarity check - ${input.firstName} similar to ${output.firstName}`])
+    logger('info', ['Vis-til-Arkiv', `Successfully verified firstname and lastname through a similarity check - ${input.firstName} ${input.lastName} above 93% similar to ${output.firstName} ${output.lastName}`])
     // await teamsWarn('Verified name through similarity - check names, and if something is fishy, fix it ASAP!', pdf, `PDF name: "${input.firstName} ${input.lastName}", DSF name: "${output.firstName} ${output.lastName}"`)
     return
   }
