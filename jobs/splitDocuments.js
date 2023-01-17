@@ -22,7 +22,7 @@ module.exports = async () => {
         retries: 0,
         pages: []
       }
-      if (pdfData.pdf.charAt(pdfData.pdf.lastIndexOf('.') -1) !== 'M') {
+      if (pdfData.pdf.charAt(pdfData.pdf.lastIndexOf('.') - 1) !== 'M') {
         moveToFolder(pdf, `${jobDir}/failedSplitted`)
         logger('error', ['Vis-til-Arkiv', `${pdf} is stuck in a split-loop! Check "${jobDir}/failedSplitted" for more info`])
         await teamsError(`${pdf} is stuck in a split-loop! Check "${jobDir}/failedSplitted" for more info`, pdf, 'WHHHOOOOps')
@@ -36,8 +36,9 @@ module.exports = async () => {
         outputDir: `${jobDir}/${pdfName}` // Optional, defaults to directory of the input pdf
       }
       try {
+        let splitRanges
         logger('info', ['Vis-til-Arkiv', `Will try to split ${pdf}`])
-        result = await splitPdf(pdfToSplit)
+        const result = await splitPdf(pdfToSplit)
         splitRanges = result.ranges
         if (result.failed.length > 0) {
           // Move splitted pdf to failed folder
@@ -60,12 +61,12 @@ module.exports = async () => {
       }
       fs.rmdirSync(`${jobDir}/${pdfName}`)
       const endTime = new Date()
-      const duration = (endTime-startTime)/1000/60
+      const duration = (endTime - startTime) / 1000 / 60
       if (duration > 240) {
-        logger('warn', ['Vis-til-Arkiv', `Splitter has been running for too long - ending task`])
+        logger('warn', ['Vis-til-Arkiv', 'Splitter has been running for too long - ending task'])
         break
       } else {
-        logger('info', ['Vis-til-Arkiv', `Splitter is still going strong, will keep splitting`])
+        logger('info', ['Vis-til-Arkiv', 'Splitter is still going strong, will keep splitting'])
       }
     }
   }

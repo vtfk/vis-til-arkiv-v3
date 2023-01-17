@@ -38,10 +38,10 @@ module.exports = async () => {
           try {
             pdfData.documentData = await findDocumentData[options.findDataMethod](method, pdfData.pdfText)
             jsonData.documentData = pdfData.documentData
-            if (pdfData.pdf.charAt(pdfData.pdf.lastIndexOf('.') -1) !== 'M') jsonData.documentData.split = true // Quick fix - not splitted ends with "M"
+            if (pdfData.pdf.charAt(pdfData.pdf.lastIndexOf('.') - 1) !== 'M') jsonData.documentData.split = true // Quick fix - not splitted ends with "M"
             moveToNextJob(jsonData, false, jobDir, 'createE18job')
           } catch (error) {
-            if (pdfData.pdf.charAt(pdfData.pdf.lastIndexOf('.') -1) !== 'M') jsonData.documentData.split = true // Quick fix - not splitted ends with "M"
+            if (pdfData.pdf.charAt(pdfData.pdf.lastIndexOf('.') - 1) !== 'M') jsonData.documentData.split = true // Quick fix - not splitted ends with "M"
             await handleError(jsonData, false, jobDir, 'Failed when finding documentData', error, false)
             continue
           }
