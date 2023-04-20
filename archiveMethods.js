@@ -120,6 +120,19 @@ const archiveMethods = {
     archiveOriginal: true,
     archiveOcr: false
   },
+  VIS012: {
+    active: true,
+    id: 'VIS012',
+    name: 'Bekreftelse på mottak av søknad',
+    findDataMethod: 'soknad',
+    archiveTemplate: 'mottat-soknad',
+    internalNoteTemplate: 'internt-notat-svarbrev',
+    internalNote: './data/blockedAddress.pdf',
+    svarUt: true,
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
+  },
   VISVarsel: {
     active: true,
     id: 'VISVarsel',
