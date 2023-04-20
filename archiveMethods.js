@@ -125,7 +125,7 @@ const archiveMethods = {
     id: 'VIS012',
     name: 'Bekreftelse på mottak av søknad',
     findDataMethod: 'soknad',
-    archiveTemplate: 'mottat-soknad',
+    archiveTemplate: 'mottatt-soknad',
     internalNoteTemplate: 'internt-notat-svarbrev',
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
