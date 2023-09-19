@@ -134,7 +134,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VISVarsel: {
-    active: true,
+    active: false,
     id: 'VISVarsel',
     name: 'Varsel om fare for manglende vurderingsgrunnlag i fag  - VO (voksenopplæring)',
     findDataMethod: 'visVarselDoc',
