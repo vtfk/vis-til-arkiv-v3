@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 module.exports = {
-  unavailable: false, // if the service should send email to user that it is unavailable, instead of archiving
+  unavailable: true, // if the service should send email to user that it is unavailable, instead of archiving
   useOcr: true, // if you should run ocr on documents that cannot be recognized (requires set up of ocr)
   ocrEngine: process.env.OCR_ENGINE || 'path to ocrMyPdf nodejs script',
   email: {
