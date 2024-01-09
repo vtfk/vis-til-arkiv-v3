@@ -24,18 +24,18 @@ module.exports = {
   deleteFinishedJobs: process.env.DELETE_FINISHED_JOBS || false,
   retryCount: 4, // don't set longer than retryTime.length
   retryTime: [5, 60, 240, 1440], // minutes
-  p360: {
-    syncElevmappeUrl: process.env.P360_SYNCELEVMAPPE_URL || 'syncelevmappe.<domain>.no/api/v1/SyncElevmappe',
-    syncElevmappeKey: process.env.P360_SYNCELEVMAPPE_KEY || 'asfdfhdskjgfkjdfgjkfglkjhdflkgdf23',
-    syncElevmappeHeaderName: process.env.P360_SYNCELEVMAPPE_HEADER_NAME || 'some-header-name',
-    archiveDocUrl: process.env.P360_ARCHIVE_DOC_URL || 'https://360.<domain>.no/SIFapi',
-    dispatchDocUrl: process.env.P360_DISPATCH_DOC_URL || 'https://360.<domain>.no/SIFapi',
-    archiveKey: process.env.P360_ARCHIVE_KEY || 'asfdfhdskjgfkjdfgjkfglkjhdflkgdf23',
-    archiveQueryString: process.env.P360_ARCHIVE_QUERY_STRING || '?mrQueryString='
+  VFK_ARCHIVE: {
+    URL: process.env.VFK_ARCHIVE_URL,
+    CLIENT_ID: process.env.VFK_ARCHIVE_CLIENT_ID,
+    CLIENT_SECRET: process.env.VFK_ARCHIVE_CLIENT_SECRET,
+    TENANT_ID: process.env.VFK_ARCHIVE_TENANT_ID,
+    SCOPE: process.env.VFK_ARCHIVE_SCOPE
   },
-  e18: {
-    url: process.env.E18_URL || 'e18.dumdumjson.no',
-    key: process.env.E18_KEY || 'mkay',
-    headerName: process.env.E18_HEADER_NAME || 'J.R.R'
-  }
+  TFK_ARCHIVE: {
+    URL: process.env.TFK_ARCHIVE_URL,
+    CLIENT_ID: process.env.TFK_ARCHIVE_CLIENT_ID,
+    CLIENT_SECRET: process.env.TFK_ARCHIVE_CLIENT_SECRET,
+    TENANT_ID: process.env.TFK_ARCHIVE_TENANT_ID,
+    SCOPE: process.env.TFK_ARCHIVE_SCOPE
+  },
 }

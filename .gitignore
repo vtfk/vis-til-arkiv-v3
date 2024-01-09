@@ -105,3 +105,6 @@ dist
 
 # Pdfs
 *.pdf
+
+# Local file cache
+/.file-cache/
