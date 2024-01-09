@@ -1,6 +1,6 @@
 const archiveMethods = {
   VIS001: {
-    active: true,
+    active: false,
     id: 'VIS001',
     name: 'Fritak for opplæring i kroppsøving',
     findDataMethod: 'soknad',
@@ -13,7 +13,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VIS002: {
-    active: true,
+    active: false,
     id: 'VIS002',
     name: 'Fritak for vurdering med karakter i kroppsøving',
     findDataMethod: 'soknad',
@@ -26,7 +26,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VIS003: {
-    active: true,
+    active: false,
     id: 'VIS003',
     name: 'Fritak for opplæring i sidemål',
     findDataMethod: 'soknad',
@@ -39,7 +39,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VIS004: {
-    active: true,
+    active: false,
     id: 'VIS004',
     name: 'Fritak for vurdering med karakter i sidemål',
     findDataMethod: 'soknad',
@@ -52,7 +52,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VIS005: {
-    active: true,
+    active: false,
     id: 'VIS005',
     name: 'Godkjenning av tidligere beståtte fag',
     findDataMethod: 'soknad',
@@ -65,7 +65,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VIS006: {
-    active: true,
+    active: false,
     id: 'VIS006',
     name: 'Tilrettelegging ved eksamen og prøver',
     findDataMethod: 'soknad',
@@ -93,7 +93,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VIS009: {
-    active: true,
+    active: false,
     id: 'VIS009',
     name: 'Godkjenning av tidligere beståtte fag - VO (voksenopplæring)',
     findDataMethod: 'soknad',
