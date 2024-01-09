@@ -2,8 +2,8 @@
 const { archiveMethods } = require('../archiveMethods')
 const { getFilesInFolder } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError, shouldRun } = require('../lib/jobTools')
-const { rootDirectory, documentDirectoryName, p360 } = require('../config')
-const axios = require('axios')
+const { rootDirectory, documentDirectoryName } = require('../config')
+const { callArchive } = require('../lib/call-archive')
 
 module.exports = async () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
@@ -18,17 +18,13 @@ module.exports = async () => {
 
         if (json.documentData.pages && archiveMethods[method].pageLimit && json.documentData.pages > archiveMethods[method].pageLimit) throw new Error(`Number of pages are too much for archivemethod ${method}, with a limit of ${archiveMethods[method].pageLimit}`)
 
-        const archiveRes = await axios.post(`${p360.archiveDocUrl}${p360.archiveQueryString}${p360.archiveKey}`, { parameter: json.metadata })
-
-        if (!archiveRes.data.Successful) {
-          throw new Error(archiveRes.data.ErrorMessage)
-        }
+        const archiveRes = await callArchive(json.documentData.schoolCountyNumber, 'Archive', { service: 'DocumentService', method: 'CreateDocument', parameter: json.metadata })
 
         let dest = 'cleanup'
         if (options.svarUt) { // If document is to be sent as well as archived
           dest = 'svarut'
         }
-        moveToNextJob({ ...json, archive: archiveRes.data }, jsonFile, jobDir, dest)
+        moveToNextJob({ ...json, archive: archiveRes }, jsonFile, jobDir, dest)
       } catch (error) {
         await handleError(json, jsonFile, jobDir, 'Failed when archiving document', error, true)
       }

@@ -3,7 +3,6 @@ const { getFilesInFolder } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError, shouldRun, writeLocalStats } = require('../lib/jobTools')
 const { teamsError } = require('../lib/teamsActions')
 const { rootDirectory, documentDirectoryName, e18, deleteFinishedJobs, originalsDirectoryName } = require('../config')
-const axios = require('axios')
 const { logger } = require('@vtfk/logger')
 const fs = require('fs')
 const path = require('path')
@@ -18,40 +17,6 @@ module.exports = async () => {
       const json = require(jsonFile) // Get json as object
 
       if (!shouldRun(json.nextTry)) continue
-      if (!json.e18taskId) {
-        try {
-          if (!json.archive) throw new Error(`${jsonFile} is missing required property "archive", something is not right`)
-          // Post stats to E18
-          const svarutRes = ('svarut' in json) ? json.svarut : false
-          const e18task = {
-            method: options.name,
-            regarding: `privatePersonRecno: ${json.privatePerson.recno}`,
-            status: 'completed',
-            system: 'vis-til-arkiv',
-            tags: [
-                `dokumenttype: ${json.documentData.documentType}`,
-                `p360Title: ${json.metadata.Title}`,
-                `svarut: ${svarutRes}`,
-                `DocumentNumber: ${json.archive.DocumentNumber}`,
-                `pdfName: ${json.pdf}`
-            ]
-          }
-          const e18Res = await axios.post(`${e18.url}/jobs/${json.e18jobId}/tasks`, e18task, { headers: { [e18.headerName]: e18.key } })
-          json.e18taskId = e18Res.data._id
-          // Delete data, everything is done
-        } catch (error) {
-          await handleError(json, jsonFile, jobDir, 'Failed when creating job on E18', error, true)
-          continue
-        }
-      }
-      try {
-        if (!json.archive) throw new Error(`${jsonFile} is missing required property "archive", something is not right`)
-
-        await axios.put(`${e18.url}/jobs/${json.e18jobId}/complete`, {}, { headers: { [e18.headerName]: e18.key } })
-      } catch (error) {
-        await handleError(json, jsonFile, jobDir, 'Failed when setting job to complete on E18', error, true)
-        continue
-      }
 
       // Increase stats for documentType
       stats[method].imported++

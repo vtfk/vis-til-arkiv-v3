@@ -32,8 +32,7 @@ module.exports = async () => {
         const metadata = createMetadata(metadataInput)
 
         // Check if we are to send document as well as archiving - set status to 'R'
-        const excludeAddressCodes = [4, 6, 7]
-        if (options.svarUt && !excludeAddressCodes.includes(json.privatePerson.addressCode)) {
+        if (options.svarUt && !json.privatePerson.addressProtection && json.privatePerson.zipCode.length === 4) {
           metadata.Status = 'R'
         }
 

@@ -2,8 +2,7 @@
 const { archiveMethods } = require('../archiveMethods')
 const { getFilesInFolder } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError, shouldRun } = require('../lib/jobTools')
-const { rootDirectory, documentDirectoryName, e18 } = require('../config')
-const axios = require('axios')
+const { rootDirectory, documentDirectoryName } = require('../config')
 
 module.exports = async () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
@@ -26,8 +25,8 @@ module.exports = async () => {
             ],
             type: 'Arkivering'
           }
-          const e18Res = await axios.post(`${e18.url}/jobs`, e18job, { headers: { [e18.headerName]: e18.key } })
-          json.e18jobId = e18Res.data._id
+          // Haha nope... const e18Res = await axios.post(`${e18.url}/jobs`, e18job, { headers: { [e18.headerName]: e18.key } })
+          json.e18jobId = 'notinuse'
           moveToNextJob(json, jsonFile, jobDir, 'syncStudentData')
         } catch (error) {
           await handleError(json, jsonFile, jobDir, 'Failed when creating job on E18', error, true)

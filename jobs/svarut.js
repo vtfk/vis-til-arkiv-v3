@@ -6,7 +6,7 @@ const { rootDirectory, documentDirectoryName, p360 } = require('../config')
 const { teamsWarn } = require('../lib/teamsActions')
 const createMetadata = require('../lib/createMetadata')
 const { logger } = require('@vtfk/logger')
-const axios = require('axios')
+const { callArchive } = require('../lib/call-archive')
 
 module.exports = async () => {
   for (const [method, options] of (Object.entries(archiveMethods).filter(m => m[1].active))) { // For each document type
@@ -17,8 +17,7 @@ module.exports = async () => {
       const json = require(jsonFile) // Get json as object
       if (!shouldRun(json.nextTry)) continue
 
-      const addressBlockCodes = [4, 6, 7]
-      if (addressBlockCodes.includes(json.privatePerson.addressCode)) {
+      if (json.privatePerson.addressProtection || json.privatePerson.zipCode !== 4) {
         try { // Create internal note and send to responsible unit
           if (!json.archive) throw new Error(`${jsonFile} is missing required property "archive", something is not right`)
           if (!json.archive.DocumentNumber) throw new Error(`${jsonFile} is missing required property "archive.DocumentNumber", something is not right`)
@@ -36,12 +35,9 @@ module.exports = async () => {
             }
           }
           const internalNoteMetadata = createMetadata(internalNoteData)
-          const internalNoteRes = await axios.post(`${p360.archiveDocUrl}${p360.archiveQueryString}${p360.archiveKey}`, { parameter: internalNoteMetadata })
+          const internalNoteRes = await callArchive(json.documentData.schoolCountyNumber, 'Archive', { service: 'DocumentService', method: 'CreateDocument', parameter: internalNoteMetadata })
 
-          if (!internalNoteRes.data.Successful) {
-            throw new Error(internalNoteRes.data.ErrorMessage)
-          }
-          moveToNextJob({ ...json, svarut: 'internalNote', internalNote: internalNoteRes.data }, jsonFile, jobDir, 'cleanup')
+          moveToNextJob({ ...json, svarut: 'internalNote', internalNote: internalNoteRes }, jsonFile, jobDir, 'cleanup')
         } catch (error) {
           await handleError(json, jsonFile, jobDir, 'Failed when creating internal note', error, true)
         }
@@ -56,10 +52,20 @@ module.exports = async () => {
             await teamsWarn(`Document ${json.archive.DocumentNumber} must be sent manually on SvarUT`, json.pdf, 'Noen must send this manually')
             moveToNextJob({ ...json, svarut: 'manual' }, jsonFile, jobDir, 'cleanup')
           } else {
-            const svarutRes = await axios.post(`${p360.dispatchDocUrl}${p360.archiveQueryString}${p360.archiveKey}`, { parameter: { Documents: [{ DocumentNumber: json.archive.DocumentNumber }] } })
-
-            if (!svarutRes.data.Successful) {
-              throw new Error(svarutRes.data.ErrorMessage)
+            const dispatchPayload = {
+              service: 'DocumentService',
+              method: 'DispatchDocuments',
+              parameter: {
+                Documents: [
+                  {
+                    DocumentNumber: json.archive.DocumentNumber
+                  }
+                ]
+              }
+            }
+            const dispatchResponse = await callArchive(json.documentData.schoolCountyNumber, 'Archive', dispatchPayload)
+            if (!dispatchResponse[0].Successful) {
+              throw new Error(`Dispatching of document ${json.archive.DocumentNumber} was not successful! ErrorMessage: ${dispatchResponse[0].ErrorMessage}`)
             }
             moveToNextJob({ ...json, svarut: true }, jsonFile, jobDir, 'cleanup')
           }
