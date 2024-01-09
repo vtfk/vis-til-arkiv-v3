@@ -122,7 +122,7 @@ Create a json file inside the *./templates directory*, reference the template in
     "Title": "Varsel om fare for regn på <<<day>>>",
     "UnofficialTitle": "Varsel om fare for regn på dag <<<day>>> - <<<month>>> - <<<year>>>",
     "DocumentDate": "<<<documentDate>>>",
-    "Archive": "Saksdokument",
+    "Archive": "Elevdokument",
     "Category": "Dokument ut",
     "Paragraph": "Offl. § 13 jf. fvl. § 13 (1) nr.1",
     "AccessCodeDescription": "Offl §13 jf. fvl §13 første ledd pkt. 1 - taushetsplikt om værforhold",
