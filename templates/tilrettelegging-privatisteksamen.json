@@ -13,7 +13,7 @@
     "ResponsibleEnterpriseNumber": "<<<schoolOrgNr>>>",
     "Contacts": [
         {
-            "ReferenceNumber": "<<<schoolOrgNr>>>",
+            "ExternalId": "<<<schoolOrgNr>>>",
             "Role": "Avsender",
             "IsUnofficial": false
         },

@@ -2,7 +2,7 @@
 const { archiveMethods } = require('../archiveMethods')
 const pdfReader = require('@vtfk/pdf-text-reader')
 const findDocumentData = require('../lib/findDocumentData')
-const { getFilesInFolder, moveToFolder, saveJsonDocument } = require('../lib/fileAndfolderActions')
+const { getFilesInFolder, moveToFolder, saveJsonDocument, getEmailFromFileName } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError } = require('../lib/jobTools')
 const { logger } = require('@vtfk/logger')
 const path = require('path')
@@ -25,7 +25,9 @@ module.exports = async () => {
         continue
       }
       try { // Get relevant data from the pdf
-        pdfData.documentData = findDocumentData[options.findDataMethod](method, pdfData.pdfText)
+        // Get user email - we need to find correct county (maybe)...
+        const userEmail = getEmailFromFileName(pdf)
+        pdfData.documentData = findDocumentData[options.findDataMethod](method, pdfData.pdfText, userEmail)
         if (pdfData.documentData.split) {
           logger('info', ['Vis-til-Arkiv', `Found several documents of type ${options.name} in ${pdf}, will send to split-job`])
           moveToFolder(pdf, `${rootDirectory}/${documentDirectoryName}/${method}-${options.archiveTemplate}/splitDocuments`)

@@ -79,9 +79,17 @@ module.exports = async () => {
         const filename = getFileName(pdf)
 
         if (unavailable) {
-          emailServiceUnavailable(userEmailAddress, filename)
+          try {
+            await emailServiceUnavailable(userEmailAddress, filename)
+          } catch (error) {
+            await teamsInfo(`Could not send email to ${userEmailAddress}`, pdf, error.response?.data || error.stack || error.toString())
+          }
         } else {
-          emailUnrecognizedDocument(userEmailAddress, filename)
+          try {
+            await emailUnrecognizedDocument(userEmailAddress, filename)
+          } catch (error) {
+            await teamsInfo(`Could not send email to ${userEmailAddress}`, pdf, error.response?.data || error.stack || error.toString())
+          }
         }
 
         if (foundTypes.length === 0) {

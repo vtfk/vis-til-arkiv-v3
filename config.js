@@ -7,7 +7,9 @@ module.exports = {
   email: {
     fileNameEmailSeparator: process.env.FILE_NAME_EMAIL_SEPARATOR || '---',
     smtpHost: process.env.SMTP_HOST || 'smtp.mail.com',
-    smtpPort: process.env.SMTP_PORT || '1'
+    smtpPort: process.env.SMTP_PORT || '1',
+    url: process.env.EMAIL_URL,
+    secret: process.env.EMAIL_SECRET
   },
   teams: {
     url: process.env.TEAMSWEBHOOK_URL || 'teams.webhook.com'
