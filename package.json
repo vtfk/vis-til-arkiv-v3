@@ -23,7 +23,7 @@
     "file-system-cache": "^2.4.4",
     "jaro-winkler": "^0.2.8",
     "nodemailer": "^6.7.0",
-    "vtfk-schools-info": "^3.4.0"
+    "vtfk-schools-info": "^3.4.1"
   },
   "devDependencies": {
     "jest": "27.5.1",
