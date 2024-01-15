@@ -2,7 +2,7 @@
 const { archiveMethods } = require('../archiveMethods')
 const { getFilesInFolder, convertToBase64, getEmailFromFileName } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError, shouldRun } = require('../lib/jobTools')
-const { rootDirectory, documentDirectoryName, p360 } = require('../config')
+const { rootDirectory, documentDirectoryName } = require('../config')
 const { teamsWarn } = require('../lib/teamsActions')
 const createMetadata = require('../lib/createMetadata')
 const { logger } = require('@vtfk/logger')
@@ -17,7 +17,7 @@ module.exports = async () => {
       const json = require(jsonFile) // Get json as object
       if (!shouldRun(json.nextTry)) continue
 
-      if (json.privatePerson.addressProtection || json.privatePerson.zipCode !== 4) {
+      if (json.privatePerson.addressProtection || json.privatePerson.zipCode !== 4) {
         try { // Create internal note and send to responsible unit
           if (!json.archive) throw new Error(`${jsonFile} is missing required property "archive", something is not right`)
           if (!json.archive.DocumentNumber) throw new Error(`${jsonFile} is missing required property "archive.DocumentNumber", something is not right`)

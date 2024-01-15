@@ -2,11 +2,10 @@
 const { archiveMethods } = require('../archiveMethods')
 const { getFilesInFolder } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError, shouldRun } = require('../lib/jobTools')
-const { rootDirectory, documentDirectoryName, p360 } = require('../config')
+const { rootDirectory, documentDirectoryName } = require('../config')
 const { logger } = require('@vtfk/logger')
-const axios = require('axios')
 const { similar } = require('../lib/jaroWinkler')
-const { teamsWarn } = require('../lib/teamsActions')
+// const { teamsWarn } = require('../lib/teamsActions')
 const { callArchive } = require('../lib/call-archive')
 
 const verifyStudentData = async (input, output, pdf, svarUt) => {

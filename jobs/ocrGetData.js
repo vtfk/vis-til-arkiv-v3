@@ -2,11 +2,11 @@
 const { archiveMethods } = require('../archiveMethods')
 const pdfReader = require('@vtfk/pdf-text-reader')
 const findDocumentData = require('../lib/findDocumentData')
-const { getFilesInFolder, moveToFolder, saveJsonDocument, getEmailFromFileName } = require('../lib/fileAndfolderActions')
+const { getFilesInFolder, moveToFolder, getEmailFromFileName } = require('../lib/fileAndfolderActions')
 const { moveToNextJob, handleError } = require('../lib/jobTools')
 const { logger } = require('@vtfk/logger')
 const path = require('path')
-const { rootDirectory, documentDirectoryName, originalsDirectoryName } = require('../config')
+const { rootDirectory, documentDirectoryName } = require('../config')
 const correctSpelling = require('../lib/correctSpelling')
 
 module.exports = async () => {

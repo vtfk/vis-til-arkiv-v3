@@ -89,14 +89,14 @@ const archiveMethods = {
     manualSvarUt: false,
     overrideSchool: true, // optional, overrides school found in document
     vfkOverride: {
-      county: "Vestfold",
-      countyNumber: "39",
+      county: 'Vestfold',
+      countyNumber: '39',
       schoolOrgnr: '4400', // Seksjon Sektorstøtte, inntak og eksamen
       accessGroup: 'Eksamen'
     },
     tfkOverride: {
-      county: "Telemark",
-      countyNumber: "40",
+      county: 'Telemark',
+      countyNumber: '40',
       schoolOrgnr: '4600', // Seksjon Skoleutvikling og folkehelse
       accessGroup: 'Eksamen'
     },

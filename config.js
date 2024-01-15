@@ -39,5 +39,5 @@ module.exports = {
     CLIENT_SECRET: process.env.TFK_ARCHIVE_CLIENT_SECRET,
     TENANT_ID: process.env.TFK_ARCHIVE_TENANT_ID,
     SCOPE: process.env.TFK_ARCHIVE_SCOPE
-  },
+  }
 }

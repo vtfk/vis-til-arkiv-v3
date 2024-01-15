@@ -17,14 +17,14 @@ module.exports = async () => {
       if (!json.e18jobId) {
         try {
           // Create job on E18
-          const e18job = {
+          /* const e18job = {
             e18: false,
             projectId: 162,
             system: 'vis-til-arkiv',
             tasks: [
             ],
             type: 'Arkivering'
-          }
+          } */
           // Haha nope... const e18Res = await axios.post(`${e18.url}/jobs`, e18job, { headers: { [e18.headerName]: e18.key } })
           json.e18jobId = 'notinuse'
           moveToNextJob(json, jsonFile, jobDir, 'syncStudentData')

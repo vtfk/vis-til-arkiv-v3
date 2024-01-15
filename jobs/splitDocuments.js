@@ -7,7 +7,7 @@ const { logger } = require('@vtfk/logger')
 const splitPdf = require('@vtfk/pdf-splitter')
 const path = require('path')
 const fs = require('fs')
-const { rootDirectory, documentDirectoryName, originalsDirectoryName } = require('../config')
+const { rootDirectory, documentDirectoryName } = require('../config')
 
 module.exports = async () => {
   const startTime = new Date()
@@ -36,10 +36,8 @@ module.exports = async () => {
         outputDir: `${jobDir}/${pdfName}` // Optional, defaults to directory of the input pdf
       }
       try {
-        let splitRanges
         logger('info', ['Vis-til-Arkiv', `Will try to split ${pdf}`])
         const result = await splitPdf(pdfToSplit)
-        splitRanges = result.ranges
         if (result.failed.length > 0) {
           // Move splitted pdf to failed folder
           logger('error', ['Vis-til-Arkiv', `Could not split ${pdf} correctly, check "${jobDir}/failedSplitted" for more info`])
