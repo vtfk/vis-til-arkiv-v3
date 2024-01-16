@@ -17,7 +17,7 @@ module.exports = async () => {
       const json = require(jsonFile) // Get json as object
       if (!shouldRun(json.nextTry)) continue
 
-      if (json.privatePerson.addressProtection || json.privatePerson.zipCode !== 4) {
+      if (json.privatePerson.addressProtection || json.privatePerson.zipCode.length !== 4) {
         try { // Create internal note and send to responsible unit
           if (!json.archive) throw new Error(`${jsonFile} is missing required property "archive", something is not right`)
           if (!json.archive.DocumentNumber) throw new Error(`${jsonFile} is missing required property "archive.DocumentNumber", something is not right`)
