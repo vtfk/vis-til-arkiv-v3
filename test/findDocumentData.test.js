@@ -48,43 +48,47 @@ const karakterStringsMissingProp = ['Færder videregående skole', '01.01.1998',
 describe('Finds correct data for archivemethod', () => {
   test('soknad', () => {
     for (const [method, options] of Object.entries(archiveMethods).filter(method => method[1].findDataMethod === 'soknad')) {
-      const documentData = soknad(method, soknadStrings)
+      const documentData = soknad(method, soknadStrings, 'gunnar@vestfoldfylke.no') // hardcoded vestfold - so we expect vestfold in override
       expect(documentData.documentType).toBe(method)
       expect(documentData.ssn).toBe(expectSoknadRes.ssn)
       expect(documentData.documentDate).toBe(expectSoknadRes.documentDate)
       expect(documentData.school).toBe(expectSoknadRes.school)
-      if (options.schoolOrgnr) {
-        expect(documentData.schoolOrgNr).toBe(options.schoolOrgnr)
+      if (options.overrideSchool) {
+        expect(documentData.schoolOrgNr).toBe(options.vfkOverride.schoolOrgnr)
       } else {
         expect(documentData.schoolOrgNr).toBe(expectSoknadRes.schoolOrgNr)
       }
-      if (options.accessGroup) {
-        expect(documentData.schoolAccessGroup).toBe(options.accessGroup)
+      if (options.overrideSchool) {
+        expect(documentData.schoolAccessGroup).toBe(options.vfkOverride.accessGroup)
+      } else {
+        expect(documentData.schoolAccessGroup).toBe(expectSoknadRes.schoolAccessGroup)
       }
     }
   })
   test('visVarselDoc', () => {
     for (const [method, options] of Object.entries(archiveMethods).filter(method => method[1].findDataMethod === 'visVarselDoc')) {
-      const documentData = visVarselDoc(method, visVarselStrings)
+      const documentData = visVarselDoc(method, visVarselStrings, 'gunnar@vestfoldfylke.no')
       expect(documentData.documentType).toBe(method)
       expect(documentData.firstName).toBe(expectVarselRes.firstName)
       expect(documentData.lastName).toBe(expectVarselRes.lastName)
       expect(documentData.documentDate).toBe(expectVarselRes.documentDate)
       expect(documentData.birthdate).toBe(expectVarselRes.birthdate)
       expect(documentData.course).toBe(expectVarselRes.course)
-      if (options.schoolOrgnr) {
-        expect(documentData.schoolOrgNr).toBe(options.schoolOrgnr)
+      if (options.overrideSchool) {
+        expect(documentData.schoolOrgNr).toBe(options.vfkOverride.schoolOrgnr)
       } else {
-        expect(documentData.schoolOrgNr).toBe(expectVarselRes.schoolOrgNr)
+        expect(documentData.schoolOrgNr).toBe(expectSoknadRes.schoolOrgNr)
       }
-      if (options.accessGroup) {
-        expect(documentData.schoolAccessGroup).toBe(options.accessGroup)
+      if (options.overrideSchool) {
+        expect(documentData.schoolAccessGroup).toBe(options.vfkOverride.accessGroup)
+      } else {
+        expect(documentData.schoolAccessGroup).toBe(expectSoknadRes.schoolAccessGroup)
       }
     }
   })
   test('visKarakterutskrift', () => {
     for (const [method, options] of Object.entries(archiveMethods).filter(method => method[1].findDataMethod === 'visKarakterutskrift')) {
-      const documentData = visKarakterutskrift(method, karakterStrings)
+      const documentData = visKarakterutskrift(method, karakterStrings, 'gunnar@vestfoldfylke.no')
       expect(documentData.documentType).toBe(method)
       expect(documentData.ssn).toBe(expectKarakterRes.ssn)
       expect(documentData.documentDate).toBe(expectKarakterRes.documentDate)
@@ -106,21 +110,21 @@ describe('Method "soknad" with documenttype', () => {
   for (const [method, options] of Object.entries(archiveMethods).filter(method => method[1].findDataMethod === 'soknad')) {
     describe(`${method} (active: ${options.active})`, () => {
       test('succeeds when strings contain duplicate property with same values', () => {
-        const documentData = soknad(method, soknadStringsDuplicatePropButSameVal)
+        const documentData = soknad(method, soknadStringsDuplicatePropButSameVal, 'gunnar@vestfoldfylke.no')
         expect(documentData.documentType).toBe(method)
         expect(documentData.ssn).toBe(expectSoknadRes.ssn)
       })
       test('fails when strings contain duplicate property with different values', () => {
-        const fn = () => soknad(method, soknadStringsDuplicatePropDiffVal)
+        const fn = () => soknad(method, soknadStringsDuplicatePropDiffVal, 'gunnar@vestfoldfylke.no')
         expect(fn).toThrow('Found duplicate description')
       })
       test('fails when strings are missing required property', () => {
-        const fn = () => soknad(method, soknadStringsMissingProp)
+        const fn = () => soknad(method, soknadStringsMissingProp, 'gunnar@vestfoldfylke.no')
         expect(fn).toThrow('Could not find value for')
       })
       test('fails when strings are missing a valid school name, and school overrride is not set', () => {
-        const fn = () => soknad(method, soknadStringsNotValidSchool)
-        if (!options.schoolOrgnr) {
+        const fn = () => soknad(method, soknadStringsNotValidSchool, 'gunnar@vestfoldfylke.no')
+        if (!options.overrideSchool) {
           expect(fn).toThrow('Could not find school data')
         }
       })
@@ -132,15 +136,15 @@ describe('Method "visVarselDoc" with documenttype', () => {
   for (const [method, options] of Object.entries(archiveMethods).filter(method => method[1].findDataMethod === 'visVarselDoc')) {
     describe(`${method} (active: ${options.active})`, () => {
       test('fails when strings contain duplicate property with same values', () => {
-        const fn = () => visVarselDoc(method, visVarselStringsDuplicatePropDiffVal)
+        const fn = () => visVarselDoc(method, visVarselStringsDuplicatePropDiffVal, 'gunnar@vestfoldfylke.no')
         expect(fn).toThrow('Found several visVarsel in one file')
       })
       test('fails when strings contain duplicate property with different values', () => {
-        const fn = () => visVarselDoc(method, visVarselStringsDuplicatePropDiffVal)
+        const fn = () => visVarselDoc(method, visVarselStringsDuplicatePropDiffVal, 'gunnar@vestfoldfylke.no')
         expect(fn).toThrow('Found several visVarsel in one file')
       })
       test('fails when strings are missing required property', () => {
-        const fn = () => visVarselDoc(method, visVarselStringsMissingProp)
+        const fn = () => visVarselDoc(method, visVarselStringsMissingProp, 'gunnar@vestfoldfylke.no')
         expect(fn).toThrow('Missing')
       })
     })
@@ -151,15 +155,15 @@ describe('Method "visKarakterutskrift" with documenttype', () => {
   for (const [method, options] of Object.entries(archiveMethods).filter(method => method[1].findDataMethod === 'visKarakterutskrift')) {
     describe(`${method} (active: ${options.active})`, () => {
       test('set split to true if it finds duplicate props (with same value)', () => {
-        const documentData = visKarakterutskrift(method, karakterStringsWithDuplicatePropButSameVal)
+        const documentData = visKarakterutskrift(method, karakterStringsWithDuplicatePropButSameVal, 'gunnar@vestfoldfylke.no')
         expect(documentData.split).toBe(true)
       })
       test('set split to true if it finds duplicate props (with different value)', () => {
-        const documentData = visKarakterutskrift(method, karakterStringsWithDuplicatePropDiffVal)
+        const documentData = visKarakterutskrift(method, karakterStringsWithDuplicatePropDiffVal, 'gunnar@vestfoldfylke.no')
         expect(documentData.split).toBe(true)
       })
       test('fails when strings are missing required property', () => {
-        const fn = () => visKarakterutskrift(method, karakterStringsMissingProp)
+        const fn = () => visKarakterutskrift(method, karakterStringsMissingProp, 'gunnar@vestfoldfylke.no')
         expect(fn).toThrow('Could not find')
       })
     })
