@@ -113,8 +113,19 @@ const archiveMethods = {
     internalNote: './data/blockedAddress.pdf',
     svarUt: true,
     manualSvarUt: false,
-    schoolOrgnr: '994309153', // optional, overrides school found in document
-    accessGroup: 'Elev Kompetansebyggeren', // optional, overrides accessgroup found in document
+    overrideSchool: true, // optional, overrides school found in document
+    vfkOverride: {
+      county: 'Vestfold',
+      countyNumber: '39',
+      schoolOrgnr: '994309153',
+      accessGroup: 'Elev Kompetansebyggeren'
+    },
+    tfkOverride: {
+      county: 'Telemark',
+      countyNumber: '40',
+      schoolOrgnr: '994309153',
+      accessGroup: 'Elev Kompetansebyggeren'
+    },
     archiveOriginal: true,
     archiveOcr: false
   },
@@ -155,8 +166,19 @@ const archiveMethods = {
     internalNote: './data/blockedAddress.pdf',
     svarUt: false,
     manualSvarUt: false,
-    schoolOrgnr: '994309153', // optional, overrides school found in document
-    accessGroup: 'Elev Kompetansebyggeren', // optional, overrides accessgroup found in document
+    overrideSchool: true, // optional, overrides school found in document
+    vfkOverride: {
+      county: 'Vestfold',
+      countyNumber: '39',
+      schoolOrgnr: '994309153',
+      accessGroup: 'Elev Kompetansebyggeren'
+    },
+    tfkOverride: {
+      county: 'Telemark',
+      countyNumber: '40',
+      schoolOrgnr: '994309153',
+      accessGroup: 'Elev Kompetansebyggeren'
+    },
     archiveOriginal: true,
     archiveOcr: false
   },
