@@ -38,7 +38,7 @@ module.exports = async () => {
         if (!json.documentData) throw new Error(`${jsonFile} is missing required property "documentData", something is not right`)
         if (!json.documentData.ssn && !(json.documentData.birthdate && json.documentData.firstName && json.documentData.lastName)) throw new Error(`${jsonFile} is missing required property "documentData.ssn" or ("documentData.birthdate" and "documentData.firstName" and "documentData.lastName"), something is not right`)
         const studentIdentifer = json.documentData.ssn ? { ssn: json.documentData.ssn } : { birthdate: json.documentData.birthdate, firstName: json.documentData.firstName, lastName: json.documentData.lastName }
-        const syncElevmappeRes = callArchive(json.documentData.schoolCountyNumber, 'SyncElevmappe', studentIdentifer)
+        const syncElevmappeRes = await callArchive(json.documentData.schoolCountyNumber, 'SyncElevmappe', studentIdentifer)
         if (json.documentData.ocr) {
           await verifyStudentData({ firstName: json.documentData.firstName, lastName: json.documentData.lastName }, { firstName: syncElevmappeRes.privatePerson.firstName, lastName: syncElevmappeRes.privatePerson.lastName }, jsonFile, archiveMethods[method].svarUt)
         }
