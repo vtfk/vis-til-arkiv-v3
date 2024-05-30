@@ -185,7 +185,7 @@ const archiveMethods = {
   VISKarakterutskrift: {
     active: true,
     id: 'VISKarakterutskrift',
-    name: 'VIS Karakterutskrift',
+    name: 'VIS Karakterutskrift T1',
     findDataMethod: 'visKarakterutskrift',
     identifierStrings: ['Karakterutskrift', 'Navn:', 'Fødselsnummer:', 'Programområde:', 'Karakter', 'hele dager', 'enkelttimer', 'Signatur'],
     splitStrings: ['Karakterutskrift', 'Navn:', 'Fødselsnummer:'],
@@ -195,9 +195,23 @@ const archiveMethods = {
     archiveOriginal: true,
     archiveOcr: false,
     pageLimit: 1
+  },
+  VISKarakterutskrift2: {
+    active: true,
+    id: 'VISKarakterutskrift2',
+    name: 'VIS Karakterutskrift',
+    findDataMethod: 'visKarakterutskriftBirthdate',
+    identifierStrings: ['Karakterutskrift', 'Navn:', 'Fødselsdato:', 'Programområde:', 'Karakter', 'hele dager', 'enkelttimer', 'Signatur'],
+    splitStrings: ['Karakterutskrift', 'Navn:', 'Fødselsdato:'],
+    archiveTemplate: 'karakterutskrift',
+    svarUt: false,
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false,
+    pageLimit: 1
   }
 }
-const standardDocs = ['visVarselDoc', 'visKarakterutskrift']
+const standardDocs = ['visVarselDoc', 'visKarakterutskrift', 'visKarakterutskriftBirthdate']
 const soknader = []
 const visStandardDocs = []
 for (const val of Object.values(archiveMethods)) {

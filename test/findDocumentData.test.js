@@ -288,30 +288,30 @@ describe('Method "visVarselDoc" with documenttype', () => {
   }
 })
 
-describe('Method "visKarakterutskrift" with documenttype', () => {
+describe('Method "visKarakterutskrift" with method', () => {
   for (const [method, options] of Object.entries(archiveMethods).filter(method => method[1].findDataMethod === 'visKarakterutskrift')) {
     describe(`${method} (active: ${options.active})`, () => {
-      test('set split to true if it finds duplicate props (with same value)', () => {
+      test('SSN. set split to true if it finds duplicate props (with same value)', () => {
         const documentData = visKarakterutskrift(method, karakterStringsWithDuplicatePropButSameVal, 'gunnar@vestfoldfylke.no')
         expect(documentData.split).toBe(true)
       })
-      test('set split to true if it finds duplicate props (with different value)', () => {
+      test('SSN. set split to true if it finds duplicate props (with different value)', () => {
         const documentData = visKarakterutskrift(method, karakterStringsWithDuplicatePropDiffVal, 'gunnar@vestfoldfylke.no')
         expect(documentData.split).toBe(true)
       })
-      test('fails when strings are missing required property', () => {
+      test('SSN. fails when strings are missing required property', () => {
         const fn = () => visKarakterutskrift(method, karakterStringsMissingProp, 'gunnar@vestfoldfylke.no')
         expect(fn).toThrow('Could not find')
       })
-      test('set split to true if it finds duplicate props (with same value)', () => {
+      test('Birthdate. set split to true if it finds duplicate props (with same value)', () => {
         const documentData = visKarakterutskriftBirthdate(method, karakterBirthdateStringsWithDuplicatePropButSameVal, 'gunnar@vestfoldfylke.no')
         expect(documentData.split).toBe(true)
       })
-      test('set split to true if it finds duplicate props (with different value)', () => {
+      test('Birthdate. set split to true if it finds duplicate props (with different value)', () => {
         const documentData = visKarakterutskriftBirthdate(method, karakterBirthdateStringsWithDuplicatePropDiffVal, 'gunnar@vestfoldfylke.no')
         expect(documentData.split).toBe(true)
       })
-      test('fails when strings are missing required property', () => {
+      test('Birthdate. fails when strings are missing required property', () => {
         const fn = () => visKarakterutskriftBirthdate(method, karakterBirthdateStringsMissingProp, 'gunnar@vestfoldfylke.no')
         expect(fn).toThrow('Could not find')
       })

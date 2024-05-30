@@ -1,6 +1,6 @@
 {
-    "Title": "Karakterutskrift - <<<type>>> - <<<schoolYear>>>",
-    "UnofficialTitle": "Karakterutskrift - <<<type>>> - <<<schoolYear>>> - <<<studentName>>>",
+    "Title": "Karakterutskrift - <<<schoolYear>>>",
+    "UnofficialTitle": "Karakterutskrift - <<<schoolYear>>> - <<<studentName>>>",
     "DocumentDate": "<<<documentDate>>>",
     "Archive": "Elevdokument",
     "Category": "Dokument ut",
@@ -29,7 +29,7 @@
             "Category": "1",
             "Format": "pdf",
             "Status": "F",
-            "Title": "Karakterutskrift - <<<type>>> - <<<schoolYear>>>",
+            "Title": "Karakterutskrift - <<<schoolYear>>>",
             "VersionFormat": "A"
         }
     ]
