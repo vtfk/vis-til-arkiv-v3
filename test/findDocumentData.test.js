@@ -123,7 +123,7 @@ const karakterStringsBirthdateTelemark = [
 ]
 
 const expectKarakterBirthdateResVestfold = {
-  birthdate: '24.09.1976',
+  birthdate: '1976-09-24',
   documentDate: '2024-01-15',
   school: 'Færder videregående skole',
   schoolOrgNr: '974575086',
@@ -133,7 +133,7 @@ const expectKarakterBirthdateResVestfold = {
   schoolYear: '2023/2024'
 }
 const expectKarakterBirthdateResTelemark = {
-  birthdate: '24.09.1976',
+  birthdate: '1976-09-24',
   documentDate: '2024-01-15',
   school: 'Bamble videregående skole',
   schoolOrgNr: '974568098',
