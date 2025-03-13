@@ -91,7 +91,7 @@ const archiveMethods = {
     vfkOverride: {
       county: 'Vestfold',
       countyNumber: '39',
-      schoolOrgnr: '4400', // Seksjon Sektorstøtte, inntak og eksamen
+      schoolOrgnr: '44000', // Seksjon Sektorstøtte, inntak og eksamen
       accessGroup: 'Eksamen'
     },
     tfkOverride: {
