@@ -97,7 +97,7 @@ const archiveMethods = {
     tfkOverride: {
       county: 'Telemark',
       countyNumber: '40',
-      schoolOrgnr: '4600', // Seksjon Skoleutvikling og folkehelse
+      schoolOrgnr: '460000', // Seksjon Skoleutvikling og folkehelse
       accessGroup: 'Eksamen'
     },
     archiveOriginal: true,
