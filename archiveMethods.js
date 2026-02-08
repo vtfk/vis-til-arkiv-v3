@@ -155,6 +155,45 @@ const archiveMethods = {
     archiveOriginal: true,
     archiveOcr: false
   },
+  VIS013: {
+    active: true,
+    id: 'VIS013',
+    name: 'Tilrettelegging ved eksamen og prøver 1',
+    findDataMethod: 'soknad',
+    archiveTemplate: 'tilrettelegging-eksamen-prover',
+    internalNoteTemplate: 'internt-notat-svarbrev',
+    internalNote: './data/blockedAddress.pdf',
+    svarUt: true,
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
+  },
+  VIS014: {
+    active: true,
+    id: 'VIS014',
+    name: 'Tilrettelegging ved eksamen og prøver 2',
+    findDataMethod: 'soknad',
+    archiveTemplate: 'tilrettelegging-eksamen-prover',
+    internalNoteTemplate: 'internt-notat-svarbrev',
+    internalNote: './data/blockedAddress.pdf',
+    svarUt: true,
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
+  },
+  VIS015: {
+    active: true,
+    id: 'VIS015',
+    name: 'Tilrettelegging ved eksamen og prøver 3',
+    findDataMethod: 'soknad',
+    archiveTemplate: 'tilrettelegging-eksamen-prover',
+    internalNoteTemplate: 'internt-notat-svarbrev',
+    internalNote: './data/blockedAddress.pdf',
+    svarUt: true,
+    manualSvarUt: false,
+    archiveOriginal: true,
+    archiveOcr: false
+  },
   VISVarsel: {
     active: false,
     id: 'VISVarsel',
