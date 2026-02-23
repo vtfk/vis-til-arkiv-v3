@@ -222,7 +222,7 @@ const archiveMethods = {
     archiveOcr: false
   },
   VISKarakterutskrift: {
-    active: true,
+    active: false,
     id: 'VISKarakterutskrift',
     name: 'VIS Karakterutskrift T1',
     findDataMethod: 'visKarakterutskrift',
@@ -236,7 +236,7 @@ const archiveMethods = {
     pageLimit: 1
   },
   VISKarakterutskrift2: {
-    active: true,
+    active: false,
     id: 'VISKarakterutskrift2',
     name: 'VIS Karakterutskrift',
     findDataMethod: 'visKarakterutskriftBirthdate',
